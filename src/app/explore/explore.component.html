@@ -1,0 +1,24 @@
+<div class="content">
+  <app-sloka [text]="text" [index]="texts[currentIndex].index"></app-sloka>
+  <div class="footer">
+    @if (!isAutoRotating) {
+      <button (click)="showPrevious()" class="fixed-size" [disabled]="false">
+        Previous
+      </button>
+      <button (click)="showNext()" class="fixed-size" [disabled]="false">
+        Next
+      </button>
+      <button (click)="startAutoRotate()" class="fixed-size" [disabled]="texts.length < 2">
+        Start SlideShow
+      </button>
+    }
+  </div>
+
+  @if (isAutoRotating) {
+    <button (click)="stopAutoRotate()" class="stop-button" type="button">
+      &#9209;
+    </button>
+  }
+</div>
+
+

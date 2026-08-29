@@ -1,0 +1,72 @@
+.text-container {
+  flex: 1;
+  padding: 65px 20px 20px 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-flow: column nowrap;
+
+  .quote-mark {
+    font-size: 4rem;
+    font-family: serif;
+    width: 260px;
+    margin-bottom: 10px;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+
+    &.text--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    &.text--exiting {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+  }
+
+  .text-index {
+    font-weight: bold;
+    font-family: sans-serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-top: 30px;
+    opacity: 0.5;
+    text-transform: uppercase;
+    width: 260px;
+    transform: translateX(0);
+    transition: transform 1s ease-in, opacity 0.8s ease-out;
+
+    &.text--visible {
+      opacity: 0.5;
+      transform: translateX(0);
+    }
+
+    &.text--exiting {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+  }
+
+  .text {
+    font-family: serif;
+    font-size: 1.3rem;
+    opacity: 0;
+    transform: translateX(100%);
+    pointer-events: none;
+    width: 260px;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease-out;
+
+    &.text--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    &.text--exiting {
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+    }
+  }
+}

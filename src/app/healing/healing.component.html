@@ -1,0 +1,24 @@
+<div class="content">
+
+  <div class="categories">
+    @for (categoryItem of slokaService.categories; track categoryItem) {
+      <button
+        (click)="setCategory(categoryItem)"
+        [class.is-selected]="category === categoryItem"
+        class="secondary">
+        {{ categoryItem }}
+      </button>
+    }
+  </div>
+
+  <app-sloka [text]="text" [index]="index"></app-sloka>
+
+  <div class="footer">
+    <button (click)="showPrevious()" class="fixed-size" [disabled]="filteredTexts.length < 2">
+      Previous
+    </button>
+    <button (click)="showNext()" class="fixed-size" [disabled]="filteredTexts.length < 2">
+      Next
+    </button>
+  </div>
+</div>

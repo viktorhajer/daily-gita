@@ -1,0 +1,25 @@
+.content {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+  padding-bottom: 10px;
+
+  .footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .stop-button {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    opacity: 0.4;
+  }
+}
+
+

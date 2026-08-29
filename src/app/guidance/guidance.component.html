@@ -1,0 +1,11 @@
+<div class="content">
+  @if (text) {
+	<app-sloka [text]="text" [index]="index"></app-sloka>
+  }
+  <div class="footer">
+    <button (click)="showRandomSloka()" type="button">
+      Get Guidance
+    </button>
+  </div>
+</div>
+

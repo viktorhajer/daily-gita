@@ -1,0 +1,26 @@
+.content {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+  padding-bottom: 10px;
+
+  .categories {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+    background: #e9f0fb;
+    padding: 5px 0;
+    border-bottom: 1px solid #639cd3;
+  }
+
+  .footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+}

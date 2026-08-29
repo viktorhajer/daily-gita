@@ -1,0 +1,41 @@
+.container {
+  width: 440px;
+  margin: 0 auto;
+  background: white;
+}
+
+.top-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: calc(100% - 10px);
+  padding: 5px;
+
+  button {
+    flex: 1;
+
+    &.is-selected {
+      background: #639cd3;
+      border-color: #639cd3;
+      color: #ffffff;
+    }
+  }
+}
+
+.content {
+  height: 600px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-content: center;
+  justify-items: center;
+
+  button {
+    width: 150px;
+    height: 150px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+

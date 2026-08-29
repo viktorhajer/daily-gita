@@ -1,0 +1,18 @@
+<div class="container">
+  @if (!appStateService.hideMainMenu() && router.url !== '/') {
+    <div class="top-buttons">
+      <button routerLink="/guidance" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Guidance</button>
+      <button routerLink="/healing" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Healing</button>
+      <button routerLink="/explore" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Explore</button>
+      <button [disabled]="true" routerLink="/learning" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Learning</button>
+    </div>
+  } @else if (router.url === '/') {
+    <div class="content">
+      <button routerLink="/guidance" type="button">Guidance</button>
+      <button routerLink="/healing" type="button">Healing</button>
+      <button routerLink="/explore" type="button">Explore</button>
+      <button [disabled]="true" routerLink="/learning" type="button">Learning</button>
+    </div>
+  }
+  <router-outlet></router-outlet>
+</div>
