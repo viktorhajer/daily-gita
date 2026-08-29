@@ -7,6 +7,7 @@
       <button [disabled]="true" routerLink="/learning" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Learning</button>
     </div>
   } @else if (router.url === '/') {
+    <h1>Daily Gita</h1>
     <div class="content">
       <button routerLink="/guidance" type="button">Guidance</button>
       <button routerLink="/healing" type="button">Healing</button>
