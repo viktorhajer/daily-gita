@@ -3,16 +3,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
-  padding-bottom: 10px;
-
-  .footer {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
 
   .stop-button {
     position: fixed;

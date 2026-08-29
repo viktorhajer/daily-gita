@@ -2,8 +2,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
-  padding-bottom: 10px;
 
   .categories {
     display: flex;
@@ -14,13 +12,5 @@
     background: #e9f0fb;
     padding: 5px 0;
     border-bottom: 1px solid #639cd3;
-  }
-
-  .footer {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
   }
 }

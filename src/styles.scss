@@ -5,6 +5,17 @@ body {
   overflow: hidden;
 }
 
+.footer {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
 button {
   border: 1px solid #639cd3;
   color: #639cd3;
