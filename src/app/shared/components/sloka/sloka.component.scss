@@ -33,20 +33,37 @@
     }
   }
 
+  .decoration-main {
+    width: 20%;
+    margin: 18px 0;
+    opacity: 1;
+    transition: all 0.3s ease-out;
+
+    &.text--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    &.text--exiting {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+  }
+
   .text-index {
     font-weight: bold;
     font-family: sans-serif;
     font-style: italic;
     font-size: 0.8rem;
-    margin-top: 30px;
-    opacity: 0.5;
+    opacity: 1;
     text-transform: uppercase;
     width: 260px;
     transform: translateX(0);
     transition: transform 1s ease-in, opacity 0.8s ease-out;
+    color: #316ea8;
 
     &.text--visible {
-      opacity: 0.5;
+      opacity: 1;
       transform: translateX(0);
     }
 

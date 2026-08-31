@@ -3,7 +3,9 @@
   <div class="text" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">
     {{ displayedText }}”
   </div>
+  <img src="assets/images/decoration_icon_main.png" alt="Line" class="decoration-main"
+       [class.text--visible]="isVisible" [class.text--exiting]="isExiting"/>
   <div class="text-index" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">
-    - Bhagavad-gítá {{ displayedSloka?.chapter }}.{{ displayedSloka?.index }}
+    Bhagavad-gítá {{ displayedSloka?.chapter }}.{{ displayedSloka?.index }}
   </div>
 </div>
