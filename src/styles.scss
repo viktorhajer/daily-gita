@@ -45,16 +45,16 @@ button {
   }
 
   .button-icon-guidance {
-    background: url('/assets/images/icon_sprites.png') -66px -122px no-repeat transparent;
+    background: url('assets/images/icon_sprites.png') -66px -122px no-repeat transparent;
   }
   .button-icon-mind {
-    background: url('/assets/images/icon_sprites.png') -66px -66px no-repeat transparent;
+    background: url('assets/images/icon_sprites.png') -66px -66px no-repeat transparent;
   }
   .button-icon-library {
-    background: url('/assets/images/icon_sprites.png') -122px -66px no-repeat transparent;
+    background: url('assets/images/icon_sprites.png') -122px -66px no-repeat transparent;
   }
   .button-icon-practice {
-    background: url('/assets/images/icon_sprites.png') -66px -10px no-repeat transparent;
+    background: url('assets/images/icon_sprites.png') -66px -10px no-repeat transparent;
   }
 
   &.is-selected {
@@ -63,16 +63,16 @@ button {
     border-color: #9b5e0521;
 
     .button-icon-guidance {
-      background: url('/assets/images/icon_sprites.png') -10px -122px no-repeat transparent;
+      background: url('assets/images/icon_sprites.png') -10px -122px no-repeat transparent;
     }
     .button-icon-mind {
-      background: url('/assets/images/icon_sprites.png') -10px -66px no-repeat transparent;
+      background: url('assets/images/icon_sprites.png') -10px -66px no-repeat transparent;
     }
     .button-icon-library {
-      background: url('/assets/images/icon_sprites.png') -122px -10px no-repeat transparent;
+      background: url('assets/images/icon_sprites.png') -122px -10px no-repeat transparent;
     }
     .button-icon-practice {
-      background: url('/assets/images/icon_sprites.png') -10px -10px no-repeat transparent;
+      background: url('assets/images/icon_sprites.png') -10px -10px no-repeat transparent;
     }
   }
 }
