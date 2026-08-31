@@ -6,12 +6,19 @@
   align-items: center;
   justify-content: flex-start;
   flex-flow: column nowrap;
+  text-align: center;
 
   .quote-mark {
-    font-size: 4rem;
+    background: #fcf8f0;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #ffddc07a;
+    border: 3px solid #ffffff85;
+    width: 85px;
+    height: 85px;
+    font-size: 7rem;
     font-family: serif;
-    width: 260px;
-    margin-bottom: 10px;
+    color: #c59030;
+    margin-bottom: 30px;
     transform: translateX(0);
     transition: transform 0.3s ease-in, opacity 0.3s ease-in;
 
@@ -51,11 +58,11 @@
 
   .text {
     font-family: serif;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     opacity: 0;
     transform: translateX(100%);
     pointer-events: none;
-    width: 260px;
+    width: 75%;
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease-out;
 
     &.text--visible {

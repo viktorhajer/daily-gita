@@ -13,12 +13,12 @@
 
   button {
     flex: 1;
-
-    &.is-selected {
-      background: #639cd3;
-      border-color: #639cd3;
-      color: #ffffff;
-    }
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    width: auto;
   }
 }
 
@@ -129,10 +129,22 @@
     pointer-events: none;
   }
 
+  &.welcome {
+    .background-bottom-image {
+      left: -30%;
+      bottom: -60px;
+      width: 160%;
+      opacity: 1;
+      transition: all 300ms ease-in-out;
+    }
+  }
+
   .background-bottom-image {
-    left: -30%;
-    bottom: -60px;
-    width: 160%;
+    left: 0;
+    bottom: 20px;
+    width: 100%;
+    opacity: 0.8;
+    transition: all 300ms ease-in-out;
   }
 
   .background-top-left {
@@ -147,4 +159,3 @@
     width: 50%;
   }
 }
-

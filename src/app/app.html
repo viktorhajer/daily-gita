@@ -1,10 +1,22 @@
 <div class="container">
   @if (!appStateService.hideMainMenu() && router.url !== '/') {
     <div class="top-buttons">
-      <button routerLink="/guidance" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Guidance</button>
-      <button routerLink="/mind" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">State of Mind</button>
-      <button routerLink="/library" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Verse Library</button>
-      <button routerLink="/" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">Practice</button>
+      <button routerLink="/guidance" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+        <div class="button-icon button-icon-guidance"></div>
+        Guidance
+      </button>
+      <button routerLink="/mind" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+        <div class="button-icon button-icon-mind"></div>
+        State of Mind
+      </button>
+      <button routerLink="/library" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+        <div class="button-icon button-icon-library"></div>
+        Verse Library
+      </button>
+      <button routerLink="/" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+        <div class="button-icon button-icon-practice"></div>
+        Practice
+      </button>
     </div>
   } @else if (router.url === '/') {
     <div class="welcome-page">
@@ -46,13 +58,11 @@
   }
   <router-outlet></router-outlet>
 
-  @if (router.url === '/') {
   <div class="background-top">
     <img src="assets/images/welcome_top_left.png" alt="Background" class="background-top-left" />
     <img src="assets/images/welcome_top_right.png" alt="Background" class="background-top-right" />
   </div>
-  }
-  <div class="background-bottom">
+  <div class="background-bottom" [class.welcome]="router.url === '/'">
     <img src="assets/images/welcome_bottom.png" alt="Background" class="background-bottom-image" />
   </div>
 </div>
