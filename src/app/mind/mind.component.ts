@@ -3,12 +3,12 @@ import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
 
 @Component({
-  selector: 'app-healing',
+  selector: 'app-mind',
   standalone: false,
-  templateUrl: './healing.component.html',
-  styleUrl: './healing.component.scss',
+  templateUrl: './mind.component.html',
+  styleUrl: './mind.component.scss',
 })
-export class HealingComponent {
+export class MindComponent {
   readonly slokaService = inject(SlokaService);
 
   texts = this.slokaService.texts;
@@ -73,3 +73,4 @@ export class HealingComponent {
     this.index = activeSloka?.index ?? '';
   }
 }
+

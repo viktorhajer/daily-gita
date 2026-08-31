@@ -2,19 +2,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { HealingComponent } from './healing.component';
+import { MindComponent } from './mind.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HealingComponent,
+    component: MindComponent,
   },
 ];
 
 @NgModule({
-  declarations: [HealingComponent],
+  declarations: [MindComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })
-export class HealingModule {}
+export class MindModule {}
+
 
 

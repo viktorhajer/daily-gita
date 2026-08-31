@@ -4,12 +4,12 @@ import { ApplicationStateService } from '../services/application-state.service';
 import { SlokaService } from '../services/sloka.service';
 
 @Component({
-  selector: 'app-explore',
+  selector: 'app-library',
   standalone: false,
-  templateUrl: './explore.component.html',
-  styleUrl: './explore.component.scss',
+  templateUrl: './library.component.html',
+  styleUrl: './library.component.scss',
 })
-export class ExploreComponent implements OnDestroy {
+export class LibraryComponent implements OnDestroy {
   private readonly autoRotateIntervalMs = 6000;
   private readonly slokaService = inject(SlokaService);
   private readonly appStateService = inject(ApplicationStateService);
@@ -65,5 +65,6 @@ export class ExploreComponent implements OnDestroy {
     this.text = this.texts[this.currentIndex].content ?? '';
   }
 }
+
 
 

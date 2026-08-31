@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-	path: 'healing',
-	loadChildren: () => import('./healing/healing.module').then((m) => m.HealingModule),
+	path: 'mind',
+	loadChildren: () => import('./mind/mind.module').then((m) => m.MindModule),
   },
   {
 	path: 'guidance',
@@ -14,7 +14,7 @@ export const routes: Routes = [
 	loadChildren: () => import('./practice/practice.module').then((m) => m.PracticeModule),
   },
   {
-	path: 'explore',
-	loadChildren: () => import('./explore/explore.module').then((m) => m.ExploreModule),
+	path: 'library',
+	loadChildren: () => import('./library/library.module').then((m) => m.LibraryModule),
   },
 ];
