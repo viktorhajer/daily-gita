@@ -1,14 +1,18 @@
 <div class="content">
 
-  <div class="categories">
-    @for (categoryItem of slokaService.categories; track categoryItem) {
-      <button
-        (click)="setCategory(categoryItem)"
-        [class.is-selected]="category === categoryItem"
-        class="secondary">
-        {{ categoryItem }}
-      </button>
-    }
+  <div class="categories-nav">
+    <button class="scroll-arrow" (click)="scrollCategories(-1)" [disabled]="!canScrollLeft">&#8249;</button>
+    <div class="categories-scroll" #categoriesScroll (scroll)="updateScrollState()">
+      @for (categoryItem of slokaService.categories; track categoryItem) {
+        <button
+          (click)="setCategory(categoryItem)"
+          [class.is-selected]="category === categoryItem"
+          class="secondary">
+          {{ categoryItem }}
+        </button>
+      }
+    </div>
+    <button class="scroll-arrow" (click)="scrollCategories(1)" [disabled]="!canScrollRight">&#8250;</button>
   </div>
 
   <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>

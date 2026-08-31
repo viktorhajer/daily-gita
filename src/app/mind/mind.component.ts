@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
 
@@ -8,8 +8,10 @@ import { SlokaService } from '../services/sloka.service';
   templateUrl: './mind.component.html',
   styleUrl: './mind.component.scss',
 })
-export class MindComponent {
+export class MindComponent implements AfterViewInit {
   readonly slokaService = inject(SlokaService);
+
+  @ViewChild('categoriesScroll') categoriesScrollEl!: ElementRef<HTMLDivElement>;
 
   texts = this.slokaService.texts;
   category = this.slokaService.categories[0] ?? '';
@@ -19,8 +21,44 @@ export class MindComponent {
   text = '';
   sloka: SlokaModel | null = null;
 
+  canScrollLeft = false;
+  canScrollRight = false;
+
   constructor() {
     this.applyCategoryFilter(true);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.updateScrollState());
+  }
+
+  updateScrollState() {
+    const el = this.categoriesScrollEl?.nativeElement;
+    if (!el) {
+      return;
+    }
+    this.canScrollLeft = el.scrollLeft > 1;
+    this.canScrollRight = el.scrollLeft + el.clientWidth < el.scrollWidth - 1;
+  }
+
+  scrollCategories(direction: 1 | -1) {
+    const container = this.categoriesScrollEl.nativeElement;
+    const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button'));
+    const containerRect = container.getBoundingClientRect();
+
+    if (direction === 1) {
+      const target = buttons.find((btn) => btn.getBoundingClientRect().right > containerRect.right + 1);
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        container.scrollBy({ left: rect.right - containerRect.right, behavior: 'smooth' });
+      }
+    } else {
+      const target = [...buttons].reverse().find((btn) => btn.getBoundingClientRect().left < containerRect.left - 1);
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        container.scrollBy({ left: rect.left - containerRect.left, behavior: 'smooth' });
+      }
+    }
   }
 
   showPrevious() {
