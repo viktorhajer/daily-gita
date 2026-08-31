@@ -11,7 +11,7 @@
     }
   </div>
 
-  <app-sloka [text]="text" [index]="index"></app-sloka>
+  <app-sloka [text]="text" [index]="index" (click)="showNext()"></app-sloka>
 
   <div class="footer">
     <button (click)="showPrevious()" class="fixed-size" [disabled]="filteredTexts.length < 2">

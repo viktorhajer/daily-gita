@@ -10,8 +10,8 @@ export const routes: Routes = [
 	loadChildren: () => import('./guidance/guidance.module').then((m) => m.GuidanceModule),
   },
   {
-	path: 'learning',
-	loadChildren: () => import('./learning/learning.module').then((m) => m.LearningModule),
+	path: 'practice',
+	loadChildren: () => import('./practice/practice.module').then((m) => m.PracticeModule),
   },
   {
 	path: 'explore',

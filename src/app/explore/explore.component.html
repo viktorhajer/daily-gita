@@ -1,5 +1,5 @@
 <div class="content">
-  <app-sloka [text]="text" [index]="texts[currentIndex].index"></app-sloka>
+  <app-sloka [text]="text" [index]="texts[currentIndex].index" (click)="showNext()"></app-sloka>
   <div class="footer">
     @if (!isAutoRotating) {
       <button (click)="showPrevious()" class="fixed-size" [disabled]="false">
