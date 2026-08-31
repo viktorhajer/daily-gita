@@ -1,0 +1,1 @@
+import{C as jg,f as Rn,w as jt}from"./main-7LGFZ3ZB.js";var e=class t{static ɵfac=function(m){return new(m||t)};static ɵmod=Rn({type:t});static ɵinj=jt({imports:[jg,jg]})};export{e as t};
