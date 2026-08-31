@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { SlokaService } from '../services/sloka.service';
+import { SlokaModel } from '../model/sloka.model';
 
 @Component({
   selector: 'app-guidance',
@@ -13,7 +14,7 @@ export class GuidanceComponent implements OnInit {
   private currentRandomIndex = -1;
 
   text = '';
-  index = '';
+  sloka: SlokaModel | null = null;
 
   ngOnInit() {
     this.showRandomSloka();
@@ -22,7 +23,7 @@ export class GuidanceComponent implements OnInit {
   showRandomSloka() {
     if (!this.slokaService.texts.length) {
       this.text = '';
-      this.index = '';
+      this.sloka = null;
       this.currentRandomIndex = -1;
       return;
     }
@@ -36,7 +37,7 @@ export class GuidanceComponent implements OnInit {
 
     const randomSloka = this.slokaService.texts[randomIndex];
     this.text = randomSloka?.content ?? '';
-    this.index = randomSloka?.index ?? '';
+    this.sloka = randomSloka ?? '';
     this.currentRandomIndex = randomIndex;
   }
 }

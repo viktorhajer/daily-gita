@@ -1,6 +1,6 @@
 <div class="content">
   @if (text) {
-	<app-sloka [text]="text" [index]="index" (click)="showRandomSloka()"></app-sloka>
+	<app-sloka [text]="text" [sloka]="sloka" (click)="showRandomSloka()"></app-sloka>
   }
   <div class="footer">
     <button (click)="showRandomSloka()" type="button">

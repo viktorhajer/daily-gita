@@ -17,7 +17,7 @@ export class MindComponent {
 
   currentIndex = 0;
   text = '';
-  index = '';
+  sloka: SlokaModel | null = null;
 
   constructor() {
     this.applyCategoryFilter(true);
@@ -56,7 +56,7 @@ export class MindComponent {
     if (!this.filteredTexts.length) {
       this.currentIndex = 0;
       this.text = '';
-      this.index = '';
+      this.sloka = null;
       return;
     }
 
@@ -70,7 +70,7 @@ export class MindComponent {
   private syncActiveText() {
     const activeSloka = this.filteredTexts[this.currentIndex];
     this.text = activeSloka?.content ?? '';
-    this.index = activeSloka?.index ?? '';
+    this.sloka = activeSloka ?? '';
   }
 }
 

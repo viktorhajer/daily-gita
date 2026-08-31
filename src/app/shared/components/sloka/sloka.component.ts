@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
+import { SlokaModel } from '../../../model/sloka.model';
 
 @Component({
   selector: 'app-sloka',
@@ -16,11 +17,11 @@ import {
   styleUrl: './sloka.component.scss',
 })
 export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
+  @Input() sloka: SlokaModel | null = null;
   @Input() text = '';
-  @Input() index = '';
 
   displayedText = '';
-  displayedIndex = '';
+  displayedSloka: SlokaModel | null = null;
   isVisible = false;
   isExiting = false;
   isTransitioning = false;
@@ -31,13 +32,13 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   private enterCompletionTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private enterFrameId: number | null = null;
   private pendingText: string | null = null;
-  private pendingIndex: string | null = null;
+  private pendingSloka: SlokaModel | null = null;
   private hasViewInitialized = false;
 
   ngAfterViewInit() {
     this.hasViewInitialized = true;
     this.displayedText = this.text ?? '';
-    this.displayedIndex = this.index ?? '';
+    this.displayedSloka = this.sloka ?? null;
     this.animateIn();
   }
 
@@ -46,25 +47,25 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes['text'] && !changes['index']) {
+    if (!changes['text'] && !changes['sloka']) {
       return;
     }
 
     const nextText = this.text ?? '';
-    const nextIndex = this.index ?? '';
+    const nextSloka = this.sloka ?? null;
 
     if (!this.hasViewInitialized) {
       this.displayedText = nextText;
-      this.displayedIndex = nextIndex;
+      this.displayedSloka = nextSloka;
       return;
     }
 
-    if (nextText === this.displayedText && nextIndex === this.displayedIndex) {
+    if (nextText === this.displayedText && nextSloka === this.displayedSloka) {
       return;
     }
 
     this.pendingText = nextText;
-    this.pendingIndex = nextIndex;
+    this.pendingSloka = nextSloka;
 
     if (!this.isTransitioning) {
       this.startExitThenEnter();
@@ -120,7 +121,7 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private hasPendingChange() {
-    return this.pendingText !== null || this.pendingIndex !== null;
+    return this.pendingText !== null || this.pendingSloka !== null;
   }
 
   private applyPendingChange() {
@@ -129,9 +130,9 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     this.displayedText = this.pendingText ?? this.displayedText;
-    this.displayedIndex = this.pendingIndex ?? this.displayedIndex;
+    this.displayedSloka = this.pendingSloka ?? this.displayedSloka;
     this.pendingText = null;
-    this.pendingIndex = null;
+    this.pendingSloka = null;
   }
 
   private clearScheduledAnimation() {
