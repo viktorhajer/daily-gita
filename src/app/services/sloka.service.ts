@@ -26,7 +26,7 @@ export class SlokaService {
     this.texts.forEach((text) => {
       text.categories?.forEach((category) => categoriesSet.add(category));
     });
-    this.storedCategories = Array.from(categoriesSet);
+    this.storedCategories = Array.from(categoriesSet).sort((a, b) => a.localeCompare(b, 'hu-HU'));
     return this.storedCategories;
   }
 
