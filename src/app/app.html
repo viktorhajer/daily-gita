@@ -1,4 +1,9 @@
-<div class="container">
+@if (isLoading()) {
+  <div class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+}
+<div class="container" [class.hidden]="isLoading()">
   @if (!appStateService.hideMainMenu() && router.url !== '/') {
     <div class="top-buttons">
       <button routerLink="/guidance" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
