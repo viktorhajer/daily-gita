@@ -4,15 +4,13 @@
   flex-direction: column;
 
   .categories-grid {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 180px);
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     align-content: start;
     gap: 10px;
-    background: #ffffff61;
     margin: 8px 0;
     padding: 10px;
-    box-shadow: 0 2px 4px #8181a35e;
     overflow-y: auto;
 
     .category-button {
