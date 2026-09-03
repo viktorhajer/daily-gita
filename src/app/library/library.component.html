@@ -1,15 +1,15 @@
 <div class="content">
-  <app-sloka [text]="text" [sloka]="texts[currentIndex]" (click)="showNext()"></app-sloka>
+  <app-sloka [text]="text" [sloka]="texts[currentIndex] ?? null" (click)="showNext()"></app-sloka>
   <div class="footer">
     @if (!isAutoRotating) {
-      <button (click)="showPrevious()" class="fixed-size" [disabled]="false">
-        Previous
+      <button (click)="showPrevious()" class="icon-size" [disabled]="false" aria-label="Previous" title="Previous">
+        &#9664;
       </button>
-      <button (click)="showNext()" class="fixed-size" [disabled]="false">
-        Next
+      <button (click)="startAutoRotate()" class="auto-play-button is-selected" [disabled]="texts.length < 2" aria-label="Auto-play" title="Auto-play">
+        Auto-play
       </button>
-      <button (click)="startAutoRotate()" class="fixed-size" [disabled]="texts.length < 2">
-        Start
+      <button (click)="showNext()" class="icon-size" [disabled]="false">
+        &#9654;
       </button>
     }
   </div>

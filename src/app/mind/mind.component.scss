@@ -3,53 +3,21 @@
   display: flex;
   flex-direction: column;
 
-  .categories-nav {
-    display: flex;
-    align-items: center;
+  .categories-grid {
+    height: calc(100vh - 150px);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    align-content: start;
+    gap: 10px;
     background: #ffffff61;
-    margin: 8px 0 0;
+    margin: 8px 0;
+    padding: 10px;
     box-shadow: 0 2px 4px #8181a35e;
+    overflow-y: auto;
 
-    .scroll-arrow {
-      flex-shrink: 0;
-      width: 28px;
-      align-self: stretch;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      font-size: 1.6rem;
-      line-height: 1;
-      color: #639cd3;
-      cursor: pointer;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.2s;
-
-      &:disabled {
-        opacity: 0.15;
-        cursor: default;
-      }
-    }
-
-    .categories-scroll {
-      flex: 1;
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 8px;
-      overflow-x: scroll;
-      scrollbar-width: none;
-      padding: 5px 4px;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
-      button {
-        flex-shrink: 0;
-      }
+    .category-button {
+      width: 100%;
+      min-height: 30px;
     }
   }
 }

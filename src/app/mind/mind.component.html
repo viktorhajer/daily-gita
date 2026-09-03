@@ -1,29 +1,29 @@
 <div class="content">
-
-  <div class="categories-nav">
-    <button class="scroll-arrow" (click)="scrollCategories(-1)" [disabled]="!canScrollLeft">&#8249;</button>
-    <div class="categories-scroll" #categoriesScroll (scroll)="updateScrollState()">
+  @if (!category) {
+    <div class="categories-grid">
       @for (categoryItem of slokaService.categories; track categoryItem) {
         <button
           (click)="setCategory(categoryItem)"
           [class.is-selected]="category === categoryItem"
-          class="secondary">
+          class="category-button">
           {{ categoryItem }}
         </button>
       }
     </div>
-    <button class="scroll-arrow" (click)="scrollCategories(1)" [disabled]="!canScrollRight">&#8250;</button>
-  </div>
+  } @else {
+    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
 
-  <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
-
-  <div class="footer">
-    <button (click)="showPrevious()" class="fixed-size" [disabled]="filteredTexts.length < 2">
-      Previous
-    </button>
-    <button (click)="showNext()" class="fixed-size" [disabled]="filteredTexts.length < 2">
-      Next
-    </button>
-  </div>
+    <div class="footer">
+      <button (click)="showPrevious()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
+        &#9664;
+      </button>
+      <button (click)="showCategorySelector()" class="icon-size is-selected" [disabled]="false" aria-label="Change Category" title="Change Category">
+        &#9776;
+      </button>
+      <button (click)="showNext()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+        &#9654;
+      </button>
+    </div>
+  }
 </div>
 

@@ -1,6 +1,6 @@
 <div class="text-container">
   <div class="quote-mark" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">“</div>
-  <div class="text" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">
+  <div class="text" [class.text--visible]="isVisible" [class.text--exiting]="isExiting" [class.text--compact]="displayedText.length > 275">
     {{ displayedText }}”
   </div>
   <img src="assets/images/decoration_icon_main.png" alt="Line" class="decoration-main"

@@ -77,17 +77,6 @@ button {
   }
 }
 
-button.secondary {
-  border: none;
-  background: none;
-  text-transform: capitalize;
-  width: auto;
-
-  &.is-selected {
-    background: #f8e5c5;
-  }
-}
-
 button:disabled {
   border-color: #b0b0b0;
   color: #b0b0b0;
@@ -95,7 +84,6 @@ button:disabled {
   opacity: 0.5;
 }
 
-button.fixed-size {
-  min-width: 90px;
-  max-width: 108px;
+button.icon-size {
+  width: 60px;
 }
