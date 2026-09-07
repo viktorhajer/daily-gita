@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { ApplicationStateService } from './services/application-state.service';
 import { SlokaService } from './services/sloka.service';
@@ -19,7 +19,7 @@ const IMAGE_ASSETS = [
 
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -44,5 +44,10 @@ export class App implements OnInit {
     Promise.all([this.slokaService.load(), ...imagePromises]).finally(() => {
       this.isLoading.set(false);
     });
+  }
+
+  navigateFromMenu(targetUrl: string) {
+    const nextUrl = this.router.url === targetUrl ? '/' : targetUrl;
+    void this.router.navigateByUrl(nextUrl);
   }
 }

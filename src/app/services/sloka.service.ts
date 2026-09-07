@@ -11,11 +11,24 @@ export class SlokaService {
   private readonly http = inject(HttpClient);
   private loadPromise: Promise<void> | null = null;
   private storedCategories: string[] = [];
+  private storedChapters: string[] = [];
 
   readonly texts: SlokaModel[] = [];
 
   constructor() {
     void this.load();
+  }
+
+  get chapters(): string[] {
+    if (this.storedChapters.length) {
+      return this.storedChapters;
+    }
+    const chaptersSet = new Set<string>();
+    this.texts.forEach((text) => {
+      chaptersSet.add(text.chapter.toString());
+    });
+    this.storedChapters = Array.from(chaptersSet).sort((a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10));
+    return this.storedChapters;
   }
 
   get categories(): string[] {

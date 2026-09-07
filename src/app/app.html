@@ -6,19 +6,19 @@
 <div class="container" [class.hidden]="isLoading()">
   @if (!appStateService.hideMainMenu() && router.url !== '/') {
     <div class="top-buttons">
-      <button routerLink="/guidance" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+      <button (click)="navigateFromMenu('/guidance')" [class.is-selected]="router.url === '/guidance'" type="button">
         <div class="button-icon button-icon-guidance"></div>
         Guidance
       </button>
-      <button routerLink="/mind" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+      <button (click)="navigateFromMenu('/mind')" [class.is-selected]="router.url === '/mind'" type="button">
         <div class="button-icon button-icon-mind"></div>
         State of Mind
       </button>
-      <button routerLink="/library" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+      <button (click)="navigateFromMenu('/chapters')" [class.is-selected]="router.url === '/chapters'" type="button">
         <div class="button-icon button-icon-library"></div>
-        Verse Library
+        Chapters
       </button>
-      <button routerLink="/" routerLinkActive="is-selected" [routerLinkActiveOptions]="{ exact: true }" type="button">
+      <button (click)="navigateFromMenu('/')" type="button">
         <div class="button-icon button-icon-practice"></div>
         Practice
       </button>
@@ -45,11 +45,11 @@
           <button>Explore States</button>
         </div>
 
-        <div class="menu-button-container library" routerLink="/library">
+        <div class="menu-button-container chapters" routerLink="/chapters">
           <img src="assets/images/library_menu_icon.png" alt="Guidance" class="button-image" />
-          <p class="button-text">Verse Library</p>
-          <p class="description">Browse and read all verses of Bhagavad Gita.</p>
-          <button>Browse Library</button>
+          <p class="button-text">Chapters</p>
+          <p class="description">Browse the Bhagavad Gita chapter by chapter.</p>
+          <button>Browse Chapters</button>
         </div>
 
         <div class="menu-button-container practice" routerLink="/practice">

@@ -14,7 +14,7 @@ export const routes: Routes = [
 	loadChildren: () => import('./practice/practice.module').then((m) => m.PracticeModule),
   },
   {
-	path: 'library',
-	loadChildren: () => import('./library/library.module').then((m) => m.LibraryModule),
+	path: 'chapters',
+	loadChildren: () => import('./chapters/chapters.module').then((m) => m.ChaptersModule),
   },
 ];

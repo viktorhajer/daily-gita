@@ -1,0 +1,43 @@
+<div class="content">
+  @if (!chapter) {
+    <div class="chapters-grid">
+      @for (chapterItem of slokaService.chapters; track chapterItem) {
+        <button
+          (click)="setChapter(chapterItem)"
+          [class.is-selected]="chapter === chapterItem"
+          class="chapter-button">
+          {{ chapterItem }}. fejezet
+        </button>
+      }
+    </div>
+  } @else {
+    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
+
+    <div class="footer">
+      @if (!isAutoRotating) {
+        <button (click)="showPrevious()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
+          &#9664;
+        </button>
+        <button (click)="showChapterSelector()" class="icon-size is-selected" [disabled]="false" aria-label="Change Chapter" title="Change Chapter">
+          &#9776;
+        </button>
+        <button (click)="startAutoRotate()" class="auto-play-button is-selected" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
+          Auto-play
+        </button>
+        <button (click)="showNext()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+          &#9654;
+        </button>
+      }
+    </div>
+
+    @if (isAutoRotating) {
+      <button (click)="stopAutoRotate()" class="stop-button" type="button">
+        &#9209;
+      </button>
+    }
+  }
+</div>
+
+
+
+

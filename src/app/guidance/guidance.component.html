@@ -3,9 +3,20 @@
 	<app-sloka [text]="text" [sloka]="sloka" (click)="showRandomSloka()"></app-sloka>
   }
   <div class="footer">
-    <button (click)="showRandomSloka()">
-      Get Guidance
-    </button>
+    @if (!isAutoRotating) {
+      <button (click)="showRandomSloka()">
+        Get Guidance
+      </button>
+      <button (click)="startAutoRotate()" class="auto-play-button is-selected" [disabled]="slokaService.texts.length < 2" aria-label="Auto-play" title="Auto-play">
+        Auto-play
+      </button>
+    }
   </div>
+
+  @if (isAutoRotating) {
+    <button (click)="stopAutoRotate()" class="stop-button" type="button">
+      &#9209;
+    </button>
+  }
 </div>
 

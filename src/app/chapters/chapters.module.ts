@@ -2,20 +2,21 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { LibraryComponent } from './library.component';
+import { ChaptersComponent } from './chapters.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LibraryComponent,
+    component: ChaptersComponent,
   },
 ];
 
 @NgModule({
-  declarations: [LibraryComponent],
+  declarations: [ChaptersComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })
-export class LibraryModule {}
+export class ChaptersModule {}
+
 
 
 
