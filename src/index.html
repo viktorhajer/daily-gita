@@ -6,6 +6,21 @@
   <base href="/">
 <!--  <base href="https://viktorhajer.github.io/daily-gita/">-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function(location) {
+      if (location.search[1] !== '/') {
+        return;
+      }
+
+      const decodedPath = location.search
+        .slice(1)
+        .split('&')
+        .map((segment) => segment.replace(/~and~/g, '&'))
+        .join('?');
+
+      window.history.replaceState(null, '', location.pathname.slice(0, -1) + decodedPath + location.hash);
+    })(window.location);
+  </script>
 </head>
 <body>
   <app-root></app-root>

@@ -5,6 +5,21 @@
   <title>Daily Gita</title>
   <base href="https://viktorhajer.github.io/daily-gita/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function(location) {
+      if (location.search[1] !== '/') {
+        return;
+      }
+
+      var decodedPath = location.search
+        .slice(1)
+        .split('&')
+        .map(function(segment) { return segment.replace(/~and~/g, '&'); })
+        .join('?');
+
+      window.history.replaceState(null, '', location.pathname.slice(0, -1) + decodedPath + location.hash);
+    })(window.location);
+  </script>
 <style>body{background:linear-gradient(0deg,#f3f0eb,#fdf9f1);font-family:Gill Sans,sans-serif;font-size:1.2rem;overflow:hidden}</style><link rel="stylesheet" href="styles-YOOIY65N.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-YOOIY65N.css"></noscript></head>
 <body>
   <app-root></app-root>
