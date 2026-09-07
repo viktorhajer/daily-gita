@@ -18,7 +18,7 @@
         <div class="button-icon button-icon-library"></div>
         Chapters
       </button>
-      <button (click)="navigateFromMenu('/')" type="button">
+      <button (click)="navigateFromMenu('/practice')" [class.is-selected]="router.url === '/practice'" type="button">
         <div class="button-icon button-icon-practice"></div>
         Practice
       </button>
