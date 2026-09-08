@@ -18,10 +18,10 @@
         <button (click)="showPrevious()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
           &#9664;
         </button>
-        <button (click)="showChapterSelector()" class="icon-size is-selected" [disabled]="false" aria-label="Change Chapter" title="Change Chapter">
+        <button (click)="showChapterSelector()" class="icon-size" [disabled]="false" aria-label="Change Chapter" title="Change Chapter">
           &#9776;
         </button>
-        <button (click)="startAutoRotate()" class="auto-play-button is-selected" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
+        <button (click)="startAutoRotate()" class="auto-play-button" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
           Auto-play
         </button>
         <button (click)="showNext()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">

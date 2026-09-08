@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
@@ -25,6 +26,7 @@ interface BlankState {
 })
 export class PracticeComponent implements OnInit {
   readonly slokaService = inject(SlokaService);
+  private readonly route = inject(ActivatedRoute);
 
   @Input() hiddenWordCount = 3;
 
@@ -36,6 +38,12 @@ export class PracticeComponent implements OnInit {
   isCompleted = false;
 
   async ngOnInit(): Promise<void> {
+    const routeVerse = this.resolveVerseFromRoute();
+    if (routeVerse) {
+      this.initVerseTokens(routeVerse);
+      return;
+    }
+
     this.startNewRound();
   }
 
@@ -200,5 +208,33 @@ export class PracticeComponent implements OnInit {
     }
 
     return result;
+  }
+
+  private resolveVerseFromRoute(): SlokaModel | null {
+    const chapterText =
+      this.route.snapshot.paramMap.get('chapter') ??
+      this.route.snapshot.queryParamMap.get('chapter');
+    const indexText =
+      this.route.snapshot.paramMap.get('index') ??
+      this.route.snapshot.queryParamMap.get('index');
+
+    if (!chapterText || !indexText) {
+      return null;
+    }
+
+    const chapter = Number.parseInt(chapterText.trim(), 10);
+    const index = indexText.trim().toLocaleLowerCase('hu-HU');
+
+    if (Number.isNaN(chapter) || !index) {
+      return null;
+    }
+
+    return (
+      this.slokaService.texts.find(
+        (sloka) =>
+          sloka.chapter === chapter &&
+          sloka.index.trim().toLocaleLowerCase('hu-HU') === index,
+      ) ?? null
+    );
   }
 }

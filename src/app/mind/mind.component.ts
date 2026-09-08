@@ -91,4 +91,3 @@ export class MindComponent {
     this.sloka = null;
   }
 }
-

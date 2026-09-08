@@ -8,6 +8,11 @@ import { PracticeComponent } from './practice.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    component: PracticeComponent,
+  },
+  {
+    path: ':chapter/:index',
     component: PracticeComponent,
   },
 ];

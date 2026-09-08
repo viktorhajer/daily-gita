@@ -4,10 +4,10 @@
   }
   <div class="footer">
     @if (!isAutoRotating) {
-      <button (click)="showRandomSloka()">
+      <button (click)="showRandomSloka()" class="guidance-button">
         Get Guidance
       </button>
-      <button (click)="startAutoRotate()" class="auto-play-button is-selected" [disabled]="slokaService.texts.length < 2" aria-label="Auto-play" title="Auto-play">
+      <button (click)="startAutoRotate()" class="auto-play-button" [disabled]="slokaService.texts.length < 2" aria-label="Auto-play" title="Auto-play">
         Auto-play
       </button>
     }
