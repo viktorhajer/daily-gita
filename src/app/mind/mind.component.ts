@@ -81,6 +81,9 @@ export class MindComponent {
     const activeSloka = this.filteredTexts[this.currentIndex];
     this.text = activeSloka?.content ?? '';
     this.sloka = activeSloka ?? null;
+    if (activeSloka) {
+      this.slokaService.lastViewedSloka = activeSloka;
+    }
   }
 
   private resetSelection() {

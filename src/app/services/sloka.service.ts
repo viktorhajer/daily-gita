@@ -14,6 +14,7 @@ export class SlokaService {
   private storedChapters: string[] = [];
 
   readonly texts: SlokaModel[] = [];
+  lastViewedSloka: SlokaModel | null = null;
 
   constructor() {
     void this.load();
@@ -44,6 +45,11 @@ export class SlokaService {
   }
 
   load(): Promise<void> {
+
+    if (this.texts.length > 0) {
+      return Promise.resolve();
+    }
+
     if (this.loadPromise) {
       return this.loadPromise;
     }

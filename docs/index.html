@@ -11,10 +11,10 @@
         return;
       }
 
-      var decodedPath = location.search
+      const decodedPath = location.search
         .slice(1)
         .split('&')
-        .map(function(segment) { return segment.replace(/~and~/g, '&'); })
+        .map((segment) => segment.replace(/~and~/g, '&'))
         .join('?');
 
       window.history.replaceState(null, '', location.pathname.slice(0, -1) + decodedPath + location.hash);
@@ -23,5 +23,5 @@
 <style>body{background:linear-gradient(0deg,#f3f0eb,#fdf9f1);font-family:Gill Sans,sans-serif;font-size:1.2rem;overflow:hidden}</style><link rel="stylesheet" href="styles-YOOIY65N.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-YOOIY65N.css"></noscript></head>
 <body>
   <app-root></app-root>
-<script src="main-HLHQBDJL.js" type="module"></script></body>
+<script src="main-T4NW7KN4.js" type="module"></script></body>
 </html>

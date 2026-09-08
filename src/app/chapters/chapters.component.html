@@ -11,7 +11,7 @@
       }
     </div>
   } @else {
-    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
+    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()" [fullScreen]="isAutoRotating"></app-sloka>
 
     <div class="footer">
       @if (!isAutoRotating) {

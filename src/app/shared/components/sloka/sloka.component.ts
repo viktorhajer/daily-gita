@@ -19,6 +19,7 @@ import { SlokaModel } from '../../../model/sloka.model';
 export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() sloka: SlokaModel | null = null;
   @Input() text = '';
+  @Input() fullScreen = false;
 
   displayedText = '';
   displayedSloka: SlokaModel | null = null;

@@ -38,12 +38,15 @@ export class PracticeComponent implements OnInit {
   isCompleted = false;
 
   async ngOnInit(): Promise<void> {
-    const routeVerse = this.resolveVerseFromRoute();
-    if (routeVerse) {
-      this.initVerseTokens(routeVerse);
+    const routeSloka = this.resolveVerseFromRoute();
+    if (routeSloka) {
+      this.initVerseTokens(routeSloka);
       return;
     }
-
+    if (this.slokaService.lastViewedSloka) {
+      this.initVerseTokens(this.slokaService.lastViewedSloka);
+      return;
+    }
     this.startNewRound();
   }
 

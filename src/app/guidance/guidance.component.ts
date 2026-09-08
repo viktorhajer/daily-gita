@@ -49,6 +49,9 @@ export class GuidanceComponent implements OnInit, OnDestroy {
     this.text = randomSloka?.content ?? '';
     this.sloka = randomSloka ?? '';
     this.currentRandomIndex = randomIndex;
+    if (randomSloka) {
+      this.slokaService.lastViewedSloka = randomSloka;
+    }
   }
 
   startAutoRotate() {

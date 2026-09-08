@@ -1,4 +1,4 @@
-<div class="text-container">
+<div class="text-container" [class.full-screen]="fullScreen">
   <div class="quote-mark" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">“</div>
   <div class="text" [class.text--visible]="isVisible" [class.text--exiting]="isExiting" [class.text--compact]="displayedText.length > 275">
     {{ displayedText }}”
