@@ -1,0 +1,66 @@
+<div class="practice-page">
+  <section class="practice-card" *ngIf="verse">
+	<header class="practice-header">
+	  <h1 class="practice-title">Missing Words</h1>
+	  <p class="practice-meta">
+		Bhagavad-gítá {{ verse.chapter }}.{{ verse.index }}
+	  </p>
+	</header>
+
+	<div class="verse" aria-live="polite">
+    “<ng-container *ngFor="let token of verseTokens; trackBy: trackByIndex">
+		<span *ngIf="token.kind === 'space'" class="verse-space">{{ token.text }}</span>
+
+		<span *ngIf="token.kind === 'text'" class="verse-word">{{ token.text }}</span>
+
+		<ng-container *ngIf="token.kind === 'blank' && blankState(token.blankIndex) as blank">
+		  <span
+			class="verse-blank"
+			[class.verse-blank--active]="isBlankActive(token.blankIndex ?? -1)"
+			[class.verse-blank--correct]="blank.status === 'correct'"
+			[class.verse-blank--incorrect]="blank.status === 'incorrect'"
+			[style.min-width.ch]="getBlankWidth(token.text)"
+		  >
+			<ng-container [ngSwitch]="blank.status">
+			  <span *ngSwitchCase="'pending'" class="blank-placeholder">&nbsp;</span>
+
+			  <span *ngSwitchCase="'correct'" class="blank-result blank-result--correct">
+				{{ blank.userAnswer }}
+			  </span>
+
+			  <span *ngSwitchCase="'incorrect'" class="blank-result blank-result--incorrect">
+				<span class="blank-user">{{ blank.userAnswer }}</span>
+				<span class="blank-correction">{{ blank.word }}</span>
+			  </span>
+			</ng-container>
+		  </span>
+		</ng-container>
+	  </ng-container>”
+	</div>
+
+	<form class="answer-panel" *ngIf="!isCompleted; else completedState" (ngSubmit)="submitAnswer()">
+	  <label class="answer-label" for="practice-answer">
+      Enter the missing word.
+	  </label>
+
+	  <div class="answer-row">
+		<input
+		  id="practice-answer"
+		  name="practiceAnswer"
+		  class="answer-input"
+		  [(ngModel)]="currentAnswer"
+		  [disabled]="!hasActiveBlank"
+		/>
+		<button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
+	  </div>
+	</form>
+
+	<ng-template #completedState>
+	  <div class="answer-panel answer-panel--completed">
+		<button type="button" class="restart-button" (click)="restartPractice()">Restart</button>
+		<button type="button" class="restart-button" (click)="startNewRound()">New Verse</button>
+	  </div>
+	</ng-template>
+  </section>
+</div>
+
