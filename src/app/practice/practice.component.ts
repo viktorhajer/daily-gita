@@ -74,11 +74,7 @@ export class PracticeComponent implements OnInit {
     }
 
     const trimmedAnswer = this.normalizeWord(this.currentAnswer);
-    if (!trimmedAnswer) {
-      return;
-    }
-
-    const isCorrect = trimmedAnswer === this.normalizeWord(activeBlank.word);
+    const isCorrect = !!trimmedAnswer && trimmedAnswer === this.normalizeWord(activeBlank.word);
     activeBlank.status = isCorrect ? 'correct' : 'incorrect';
     activeBlank.userAnswer = this.currentAnswer.trim();
     this.currentAnswer = '';
@@ -90,7 +86,7 @@ export class PracticeComponent implements OnInit {
   }
 
   canSubmit(): boolean {
-    return !!this.normalizeWord(this.currentAnswer) && !this.isCompleted && this.hasActiveBlank;
+    return !this.isCompleted && this.hasActiveBlank;
   }
 
   blankState(blankIndex: number | undefined): BlankState | null {
@@ -114,19 +110,7 @@ export class PracticeComponent implements OnInit {
   }
 
   startNewRound(): void {
-    const candidateTexts = this.slokaService.texts.filter(
-      (text) => this.getEligibleWords(text.content).length >= this.hiddenWordCount,
-    );
-    const fallbackTexts = this.slokaService.texts.filter(
-      (text) => this.getEligibleWords(text.content).length > 0,
-    );
-    const pool = candidateTexts.length
-      ? candidateTexts
-      : fallbackTexts.length
-        ? fallbackTexts
-        : this.slokaService.texts;
-    const selectedVerse = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
-
+    const selectedVerse = this.slokaService.texts[Math.floor(Math.random() * this.slokaService.texts.length)];
     if (!selectedVerse) {
       this.verse = null;
       this.verseTokens = [];
@@ -134,7 +118,6 @@ export class PracticeComponent implements OnInit {
       this.isCompleted = true;
       return;
     }
-
     this.initVerseTokens(selectedVerse);
   }
 
@@ -187,15 +170,8 @@ export class PracticeComponent implements OnInit {
     );
   }
 
-  private getEligibleWords(content: string): string[] {
-    return this.tokenizeVerse(content)
-      .filter((token): token is VerseToken & { kind: 'text' } => token.kind === 'text')
-      .map((token) => token.text)
-      .filter((word) => this.isEligibleWord(word));
-  }
-
   private isEligibleWord(word: string): boolean {
-    return /^[\p{L}\p{N}]{4,}$/u.test(word);
+    return /^[\p{L}\p{N}]{5,}$/u.test(word);
   }
 
   private normalizeWord(word: string): string {
