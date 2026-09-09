@@ -1,0 +1,31 @@
+<div class="content">
+  @if (sloka) {
+    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()" [fullScreen]="isAutoRotating"></app-sloka>
+  } @else {
+    <p class="empty-state">No favourite sloka selected yet.</p>
+  }
+
+  <div class="footer">
+    @if (!isAutoRotating) {
+      <button (click)="showPrevious()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
+        &laquo;
+      </button>
+      <button (click)="startAutoRotate()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
+        &#9654;
+      </button>
+      <button (click)="remove()" class="html-icon" [disabled]="filteredTexts.length < 1">
+        &#9733;
+      </button>
+      <button (click)="showNext()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+        &raquo;
+      </button>
+    }
+  </div>
+
+  @if (isAutoRotating) {
+    <button (click)="stopAutoRotate()" class="stop-button" type="button">
+      &#9209;
+    </button>
+  }
+</div>
+
