@@ -4,11 +4,14 @@
   }
   <div class="footer">
     @if (!isAutoRotating) {
-      <button (click)="showRandomSloka()" class="guidance-button">
-        Get Guidance
+      <button (click)="showRandomSloka()" class="html-icon">
+        &#8634;
       </button>
-      <button (click)="startAutoRotate()" class="auto-play-button" [disabled]="slokaService.texts.length < 2" aria-label="Auto-play" title="Auto-play">
-        Auto-play
+      <button (click)="startAutoRotate()" class="icon-size" [disabled]="slokaService.texts.length < 2">
+        &#9654;
+      </button>
+      <button (click)="favouriteService.toggle(sloka)" class="html-icon" [disabled]="slokaService.texts.length < 2">
+        @if (sloka && favouriteService.isFavourite(sloka)) { &#9733; } @else { &#9734; }
       </button>
     }
   </div>

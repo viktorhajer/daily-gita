@@ -15,17 +15,20 @@
 
     <div class="footer">
       @if (!isAutoRotating) {
-        <button (click)="showPrevious()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
-          &#9664;
+        <button (click)="showPrevious()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
+          «
         </button>
         <button (click)="showChapterSelector()" class="icon-size" [disabled]="false" aria-label="Change Chapter" title="Change Chapter">
           &#9776;
         </button>
-        <button (click)="startAutoRotate()" class="auto-play-button" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
-          Auto-play
-        </button>
-        <button (click)="showNext()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+        <button (click)="startAutoRotate()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Auto-play" title="Auto-play">
           &#9654;
+        </button>
+        <button (click)="favouriteService.toggle(sloka)" class="html-icon" [disabled]="slokaService.texts.length < 2">
+          @if (sloka && favouriteService.isFavourite(sloka)) { &#9733; } @else { &#9734; }
+        </button>
+        <button (click)="showNext()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+          »
         </button>
       }
     </div>

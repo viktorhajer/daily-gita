@@ -14,14 +14,17 @@
     <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
 
     <div class="footer">
-      <button (click)="showPrevious()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
-        &#9664;
+      <button (click)="showPrevious()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
+        «
       </button>
       <button (click)="showCategorySelector()" class="icon-size" [disabled]="false" aria-label="Change Category" title="Change Category">
         &#9776;
       </button>
-      <button (click)="showNext()" class="icon-size" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
-        &#9654;
+      <button (click)="favouriteService.toggle(sloka)" class="html-icon" [disabled]="slokaService.texts.length < 2">
+        @if (sloka && favouriteService.isFavourite(sloka)) { &#9733; } @else { &#9734; }
+      </button>
+      <button (click)="showNext()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Next" title="Next">
+        »
       </button>
     </div>
   }

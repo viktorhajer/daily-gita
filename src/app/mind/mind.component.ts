@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
+import { FavouriteService } from '../services/favourite.service';
 
 @Component({
   selector: 'app-mind',
@@ -10,6 +11,7 @@ import { SlokaService } from '../services/sloka.service';
 })
 export class MindComponent {
   readonly slokaService = inject(SlokaService);
+  readonly favouriteService = inject(FavouriteService);
 
   texts = this.slokaService.texts;
   category: string | null = null;

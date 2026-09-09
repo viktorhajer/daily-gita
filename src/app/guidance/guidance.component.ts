@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angula
 import { ApplicationStateService } from '../services/application-state.service';
 import { SlokaService } from '../services/sloka.service';
 import { SlokaModel } from '../model/sloka.model';
+import { FavouriteService } from '../services/favourite.service';
 
 @Component({
   selector: 'app-guidance',
@@ -11,8 +12,9 @@ import { SlokaModel } from '../model/sloka.model';
   styleUrl: './guidance.component.scss',
 })
 export class GuidanceComponent implements OnInit, OnDestroy {
-  private readonly autoRotateIntervalMs = 6000;
   readonly slokaService = inject(SlokaService);
+  readonly favouriteService = inject(FavouriteService);
+  private readonly autoRotateIntervalMs = 6000;
   private readonly appStateService = inject(ApplicationStateService);
   private readonly cdr = inject(ChangeDetectorRef);
   private currentRandomIndex = -1;

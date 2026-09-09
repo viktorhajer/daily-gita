@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { SlokaModel } from '../model/sloka.model';
 import { ApplicationStateService } from '../services/application-state.service';
 import { SlokaService } from '../services/sloka.service';
+import { FavouriteService } from '../services/favourite.service';
 
 @Component({
   selector: 'app-chapters',
@@ -11,10 +12,12 @@ import { SlokaService } from '../services/sloka.service';
   styleUrl: './chapters.component.scss',
 })
 export class ChaptersComponent implements OnDestroy {
-  private readonly autoRotateIntervalMs = 6000;
   readonly slokaService = inject(SlokaService);
+  readonly favouriteService = inject(FavouriteService);
   private readonly appStateService = inject(ApplicationStateService);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  private readonly autoRotateIntervalMs = 6000;
 
   texts = this.slokaService.texts;
   chapter: string | null = null;
