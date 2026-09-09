@@ -8,19 +8,23 @@
     <div class="top-buttons">
       <button (click)="navigateFromMenu('/guidance')" [class.is-selected]="router.url === '/guidance'" type="button">
         <div class="button-icon button-icon-guidance"></div>
-        Guidance
+        Guide
       </button>
       <button (click)="navigateFromMenu('/mind')" [class.is-selected]="router.url === '/mind'" type="button">
         <div class="button-icon button-icon-mind"></div>
-        State of Mind
+        Mind
       </button>
       <button (click)="navigateFromMenu('/chapters')" [class.is-selected]="router.url === '/chapters'" type="button">
         <div class="button-icon button-icon-library"></div>
-        Chapters
+        Book
+      </button>
+      <button (click)="navigateFromMenu('/favourite')" [class.is-selected]="router.url === '/favourite'" type="button">
+        <div class="button-icon fav-icon">&#9734;</div>
+        Fav
       </button>
       <button (click)="navigateFromMenu('/practice')" [class.is-selected]="router.url === '/practice'" type="button">
         <div class="button-icon button-icon-practice"></div>
-        Practice
+        Train
       </button>
     </div>
   } @else if (router.url === '/') {
@@ -40,7 +44,7 @@
 
         <div class="menu-button-container mind" routerLink="/mind">
           <img src="assets/images/mind_menu_icon.png" alt="Guidance" class="button-image" />
-          <p class="button-text">State of Mind</p>
+          <p class="button-text">Mind</p>
           <p class="description">Find verses for what you're feeling.</p>
           <button>Explore States</button>
         </div>
@@ -54,7 +58,7 @@
 
         <div class="menu-button-container practice" routerLink="/practice">
           <img src="assets/images/practice_menu_icon.png" alt="Guidance" class="button-image" />
-          <p class="button-text">Practice</p>
+          <p class="button-text">Train</p>
           <p class="description">Learn and memorize verses step by step.</p>
           <button>Start Practice</button>
         </div>

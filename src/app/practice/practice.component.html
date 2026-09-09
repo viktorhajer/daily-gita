@@ -58,7 +58,7 @@
 		  [disabled]="!hasActiveBlank"
 		/>
 		<button
-		  class="html-icon"
+		  class="reveal-button"
 		  type="button"
 		  [disabled]="!hasPendingBlanks"
 		  (pointerdown)="startRevealPendingBlanks()"
@@ -71,7 +71,7 @@
 		  (keydown.enter)="startRevealPendingBlanks()"
 		  (keyup.enter)="stopRevealPendingBlanks()"
 		>
-      &#128065;
+      Reveal
 		</button>
 		<button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
 	  </div>

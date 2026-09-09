@@ -14,6 +14,10 @@ export const routes: Routes = [
 	loadChildren: () => import('./practice/practice.module').then((m) => m.PracticeModule),
   },
   {
+	path: 'favourite',
+	loadChildren: () => import('./favourite/favourite.module').then((m) => m.FavouriteModule),
+  },
+  {
 	path: 'chapters',
 	loadChildren: () => import('./chapters/chapters.module').then((m) => m.ChaptersModule),
   },
