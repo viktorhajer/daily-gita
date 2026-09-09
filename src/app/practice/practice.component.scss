@@ -68,6 +68,12 @@
   color: #2f2400;
 }
 
+.verse-blank--revealed {
+  background: #d9ecff;
+  border-color: #8fc2f3;
+  color: #1b4d7c;
+}
+
 .verse-blank--correct {
   background: #88b398;
   border-color: #55c975;
@@ -97,6 +103,10 @@
 }
 
 .blank-result--correct {
+  font-weight: 700;
+}
+
+.blank-result--revealed {
   font-weight: 700;
 }
 

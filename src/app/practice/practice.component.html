@@ -14,12 +14,21 @@
 		  <span
 			class="verse-blank"
 			[class.verse-blank--active]="isBlankActive(token.blankIndex ?? -1)"
+			[class.verse-blank--revealed]="shouldRevealBlank(token.blankIndex)"
 			[class.verse-blank--correct]="blank.status === 'correct'"
 			[class.verse-blank--incorrect]="blank.status === 'incorrect'"
 			[style.min-width.ch]="getBlankWidth(token.text)"
 		  >
 			<ng-container [ngSwitch]="blank.status">
-			  <span *ngSwitchCase="'pending'" class="blank-placeholder">&nbsp;</span>
+			  <ng-container *ngSwitchCase="'pending'">
+				<span *ngIf="shouldRevealBlank(token.blankIndex); else hiddenBlank" class="blank-result blank-result--revealed">
+				  {{ blank.word }}
+				</span>
+
+				<ng-template #hiddenBlank>
+				  <span class="blank-placeholder">&nbsp;</span>
+				</ng-template>
+			  </ng-container>
 
 			  <span *ngSwitchCase="'correct'" class="blank-result blank-result--correct">
 				{{ blank.userAnswer }}
@@ -48,6 +57,22 @@
 		  [(ngModel)]="currentAnswer"
 		  [disabled]="!hasActiveBlank"
 		/>
+		<button
+		  class="html-icon"
+		  type="button"
+		  [disabled]="!hasPendingBlanks"
+		  (pointerdown)="startRevealPendingBlanks()"
+		  (pointerup)="stopRevealPendingBlanks()"
+		  (pointerleave)="stopRevealPendingBlanks()"
+		  (pointercancel)="stopRevealPendingBlanks()"
+		  (blur)="stopRevealPendingBlanks()"
+		  (keydown.space)="startRevealPendingBlanks()"
+		  (keyup.space)="stopRevealPendingBlanks()"
+		  (keydown.enter)="startRevealPendingBlanks()"
+		  (keyup.enter)="stopRevealPendingBlanks()"
+		>
+      &#128065;
+		</button>
 		<button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
 	  </div>
 	</form>
@@ -55,7 +80,7 @@
 	<ng-template #completedState>
 	  <div class="answer-panel answer-panel--completed">
 		<button type="button" class="restart-button" (click)="restartPractice()">Restart</button>
-		<button type="button" class="restart-button" (click)="startNewRound()">New Verse</button>
+		<button type="button" class="restart-button" (click)="startNewRound()">New Sloka</button>
 	  </div>
 	</ng-template>
   </section>

@@ -36,6 +36,7 @@ export class PracticeComponent implements OnInit {
   currentBlankIndex = 0;
   currentAnswer = '';
   isCompleted = false;
+  showPendingAnswers = false;
 
   async ngOnInit(): Promise<void> {
     const routeSloka = this.resolveVerseFromRoute();
@@ -58,7 +59,13 @@ export class PracticeComponent implements OnInit {
     return !!this.activeBlank;
   }
 
+  get hasPendingBlanks(): boolean {
+    return this.blanks.some((blank) => blank.status === 'pending');
+  }
+
   restartPractice(): void {
+    this.stopRevealPendingBlanks();
+
     if (!this.verse) {
       this.startNewRound();
       return;
@@ -72,6 +79,8 @@ export class PracticeComponent implements OnInit {
     if (!activeBlank || this.isCompleted) {
       return;
     }
+
+    this.stopRevealPendingBlanks();
 
     const trimmedAnswer = this.normalizeWord(this.currentAnswer);
     const isCorrect = !!trimmedAnswer && trimmedAnswer === this.normalizeWord(activeBlank.word);
@@ -87,6 +96,26 @@ export class PracticeComponent implements OnInit {
 
   canSubmit(): boolean {
     return !this.isCompleted && this.hasActiveBlank;
+  }
+
+  shouldRevealBlank(blankIndex: number | undefined): boolean {
+    if (blankIndex === undefined) {
+      return false;
+    }
+
+    return this.showPendingAnswers && this.blanks[blankIndex]?.status === 'pending';
+  }
+
+  startRevealPendingBlanks(): void {
+    if (this.isCompleted || !this.hasPendingBlanks) {
+      return;
+    }
+
+    this.showPendingAnswers = true;
+  }
+
+  stopRevealPendingBlanks(): void {
+    this.showPendingAnswers = false;
   }
 
   blankState(blankIndex: number | undefined): BlankState | null {
@@ -110,6 +139,8 @@ export class PracticeComponent implements OnInit {
   }
 
   startNewRound(): void {
+    this.stopRevealPendingBlanks();
+
     const selectedVerse = this.slokaService.texts[Math.floor(Math.random() * this.slokaService.texts.length)];
     if (!selectedVerse) {
       this.verse = null;
@@ -125,6 +156,7 @@ export class PracticeComponent implements OnInit {
     this.currentAnswer = '';
     this.currentBlankIndex = 0;
     this.isCompleted = false;
+    this.showPendingAnswers = false;
     const tokens = this.tokenizeVerse(selectedVerse.content);
     const eligibleIndices = tokens
       .map((token, index) => ({ token, index }))
