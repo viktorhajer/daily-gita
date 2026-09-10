@@ -5,6 +5,9 @@ import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
 
 type TokenKind = 'text' | 'space' | 'blank';
+type SelectionBranch = 'include' | 'skip';
+
+const MIN_BLANK_DISTANCE_CHARACTERS = 8;
 
 interface VerseToken {
   kind: TokenKind;
@@ -16,6 +19,12 @@ interface BlankState {
   word: string;
   status: 'pending' | 'correct' | 'incorrect';
   userAnswer: string;
+}
+
+interface EligibleWord {
+  tokenIndex: number;
+  startOffset: number;
+  endOffset: number;
 }
 
 @Component({
@@ -158,15 +167,8 @@ export class PracticeComponent implements OnInit {
     this.isCompleted = false;
     this.showPendingAnswers = false;
     const tokens = this.tokenizeVerse(selectedVerse.content);
-    const eligibleIndices = tokens
-      .map((token, index) => ({ token, index }))
-      .filter(({ token }) => token.kind === 'text' && this.isEligibleWord(token.text))
-      .map(({ index }) => index);
-
-    const blankCount = Math.min(this.hiddenWordCount, eligibleIndices.length);
-    const selectedBlankIndices = this.shuffle(eligibleIndices)
-      .slice(0, blankCount)
-      .sort((a, b) => a - b);
+    const eligibleWords = this.collectEligibleWords(tokens);
+    const selectedBlankIndices = this.selectRandomBlankIndices(eligibleWords, this.hiddenWordCount);
     const blankIndexByTokenIndex = new Map<number, number>();
 
     selectedBlankIndices.forEach((tokenIndex, blankIndex) => {
@@ -200,6 +202,91 @@ export class PracticeComponent implements OnInit {
     return (content.match(/(\s+|[^\s]+)/g) ?? []).map((token) =>
       /\s+/.test(token) ? { kind: 'space', text: token } : { kind: 'text', text: token },
     );
+  }
+
+  private collectEligibleWords(tokens: VerseToken[]): EligibleWord[] {
+    let currentOffset = 0;
+
+    return tokens.flatMap((token, tokenIndex) => {
+      const startOffset = currentOffset;
+      const endOffset = startOffset + token.text.length;
+      currentOffset = endOffset;
+
+      if (token.kind !== 'text') {
+        return [];
+      }
+
+      return this.isEligibleWord(token.text) ? [{ tokenIndex, startOffset, endOffset }] : [];
+    });
+  }
+
+  private selectRandomBlankIndices(eligibleWords: EligibleWord[], requestedBlankCount: number): number[] {
+    const orderedWords = [...eligibleWords].sort((left, right) => left.startOffset - right.startOffset);
+    const maxRequestedBlankCount = Math.min(requestedBlankCount, orderedWords.length);
+
+    for (let blankCount = maxRequestedBlankCount; blankCount > 0; blankCount -= 1) {
+      const selection = this.pickWordsWithMinimumDistance(orderedWords, blankCount);
+
+      if (selection) {
+        return selection.map(({ tokenIndex }) => tokenIndex).sort((left, right) => left - right);
+      }
+    }
+
+    return [];
+  }
+
+  private pickWordsWithMinimumDistance(words: EligibleWord[], blankCount: number): EligibleWord[] | null {
+    const failedStates = new Set<string>();
+
+    const trySelect = (
+      index: number,
+      remaining: number,
+      previousWordEndOffset: number | null,
+    ): EligibleWord[] | null => {
+      if (remaining === 0) {
+        return [];
+      }
+
+      if (index >= words.length) {
+        return null;
+      }
+
+      const stateKey = `${index}|${remaining}|${previousWordEndOffset ?? -1}`;
+      if (failedStates.has(stateKey)) {
+        return null;
+      }
+
+      const currentWord = words[index];
+      const canInclude =
+        previousWordEndOffset === null ||
+        currentWord.startOffset - previousWordEndOffset >= MIN_BLANK_DISTANCE_CHARACTERS;
+      const branchOrder: SelectionBranch[] = canInclude
+        ? this.shuffle<SelectionBranch>(['include', 'skip'])
+        : ['skip'];
+
+      for (const branch of branchOrder) {
+        if (branch === 'include' && canInclude) {
+          const selectedTail = trySelect(index + 1, remaining - 1, currentWord.endOffset);
+
+          if (selectedTail) {
+            return [currentWord, ...selectedTail];
+          }
+        }
+
+        if (branch === 'skip') {
+          const skippedTail = trySelect(index + 1, remaining, previousWordEndOffset);
+
+          if (skippedTail) {
+            return skippedTail;
+          }
+        }
+      }
+
+      failedStates.add(stateKey);
+      return null;
+    };
+
+    return trySelect(0, blankCount, null);
   }
 
   private isEligibleWord(word: string): boolean {
