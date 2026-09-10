@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
+import { normalizePracticeWord } from './practice-word.util';
+import { selectDifferentVerse } from './practice-round.util';
 
 type TokenKind = 'text' | 'space' | 'blank';
 type SelectionBranch = 'include' | 'skip';
 
-const MIN_BLANK_DISTANCE_CHARACTERS = 8;
+const MIN_BLANK_DISTANCE_CHARACTERS = 5;
 const BLANK_MARKER_PATTERN = /\*([^*]+)\*/gu;
 
 interface VerseToken {
@@ -42,7 +44,7 @@ export class PracticeComponent implements OnInit {
   readonly slokaService = inject(SlokaService);
   private readonly route = inject(ActivatedRoute);
 
-  @Input() hiddenWordCount = 3;
+  @Input() hiddenWordCount = 5;
 
   verse: SlokaModel | null = null;
   verseTokens: VerseToken[] = [];
@@ -155,7 +157,7 @@ export class PracticeComponent implements OnInit {
   startNewRound(): void {
     this.stopRevealPendingBlanks();
 
-    const selectedVerse = this.slokaService.texts[Math.floor(Math.random() * this.slokaService.texts.length)];
+    const selectedVerse = selectDifferentVerse(this.slokaService.texts, this.verse);
     if (!selectedVerse) {
       this.verse = null;
       this.verseTokens = [];
@@ -337,7 +339,7 @@ export class PracticeComponent implements OnInit {
 
 
   private normalizeWord(word: string): string {
-    return word.trim().toLocaleLowerCase('hu-HU').normalize('NFKC');
+    return normalizePracticeWord(word);
   }
 
   private shuffle<T>(items: T[]): T[] {

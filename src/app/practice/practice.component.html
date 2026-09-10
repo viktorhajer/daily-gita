@@ -57,30 +57,31 @@
 		  [(ngModel)]="currentAnswer"
 		  [disabled]="!hasActiveBlank"
 		/>
-		<button
-		  class="reveal-button"
-		  type="button"
-		  [disabled]="!hasPendingBlanks"
-		  (pointerdown)="startRevealPendingBlanks()"
-		  (pointerup)="stopRevealPendingBlanks()"
-		  (pointerleave)="stopRevealPendingBlanks()"
-		  (pointercancel)="stopRevealPendingBlanks()"
-		  (blur)="stopRevealPendingBlanks()"
-		  (keydown.space)="startRevealPendingBlanks()"
-		  (keyup.space)="stopRevealPendingBlanks()"
-		  (keydown.enter)="startRevealPendingBlanks()"
-		  (keyup.enter)="stopRevealPendingBlanks()"
-		>
-      Reveal
-		</button>
-		<button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
+      <button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
+      <button
+        class="reveal-button"
+        type="button"
+        [disabled]="!hasPendingBlanks"
+        (pointerdown)="startRevealPendingBlanks()"
+        (pointerup)="stopRevealPendingBlanks()"
+        (pointerleave)="stopRevealPendingBlanks()"
+        (pointercancel)="stopRevealPendingBlanks()"
+        (blur)="stopRevealPendingBlanks()"
+        (keydown.space)="startRevealPendingBlanks()"
+        (keyup.space)="stopRevealPendingBlanks()"
+        (keydown.enter)="startRevealPendingBlanks()"
+        (keyup.enter)="stopRevealPendingBlanks()"
+      >
+        Reveal
+      </button>
+      <button class="restart-button" type="button" (click)="startNewRound()">New</button>
 	  </div>
 	</form>
 
 	<ng-template #completedState>
 	  <div class="answer-panel answer-panel--completed">
 		<button type="button" class="restart-button" (click)="restartPractice()">Restart</button>
-		<button type="button" class="restart-button" (click)="startNewRound()">New Sloka</button>
+		<button type="button" class="restart-button" (click)="startNewRound()">New</button>
 	  </div>
 	</ng-template>
   </section>
