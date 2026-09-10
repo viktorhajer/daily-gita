@@ -21,8 +21,8 @@
 		  >
 			<ng-container [ngSwitch]="blank.status">
 			  <ng-container *ngSwitchCase="'pending'">
-				<span *ngIf="shouldRevealBlank(token.blankIndex); else hiddenBlank" class="blank-result blank-result--revealed">
-				  {{ blank.word }}
+				  <span *ngIf="shouldRevealBlank(token.blankIndex); else hiddenBlank" class="blank-result blank-result--revealed">
+					{{ blank.displayText }}
 				</span>
 
 				<ng-template #hiddenBlank>
@@ -36,7 +36,7 @@
 
 			  <span *ngSwitchCase="'incorrect'" class="blank-result blank-result--incorrect">
 				<span class="blank-user">{{ blank.userAnswer }}</span>
-				<span class="blank-correction">{{ blank.word }}</span>
+				<span class="blank-correction">{{ blank.displayText }}</span>
 			  </span>
 			</ng-container>
 		  </span>

@@ -38,7 +38,7 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   ngAfterViewInit() {
     this.hasViewInitialized = true;
-    this.displayedText = this.text ?? '';
+    this.displayedText = this.sanitizeText(this.text);
     this.displayedSloka = this.sloka ?? null;
     this.animateIn();
   }
@@ -52,7 +52,7 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
       return;
     }
 
-    const nextText = this.text ?? '';
+    const nextText = this.sanitizeText(this.text);
     const nextSloka = this.sloka ?? null;
 
     if (!this.hasViewInitialized) {
@@ -151,5 +151,9 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
       cancelAnimationFrame(this.enterFrameId);
       this.enterFrameId = null;
     }
+  }
+
+  private sanitizeText(text: string | null | undefined): string {
+    return (text ?? '').replace(/\*/g, '');
   }
 }

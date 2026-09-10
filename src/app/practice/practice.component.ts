@@ -8,21 +8,26 @@ type TokenKind = 'text' | 'space' | 'blank';
 type SelectionBranch = 'include' | 'skip';
 
 const MIN_BLANK_DISTANCE_CHARACTERS = 8;
+const BLANK_MARKER_PATTERN = /\*([^*]+)\*/gu;
 
 interface VerseToken {
   kind: TokenKind;
   text: string;
   blankIndex?: number;
+  markedWord?: string;
 }
 
 interface BlankState {
   word: string;
+  displayText: string;
   status: 'pending' | 'correct' | 'incorrect';
   userAnswer: string;
 }
 
 interface EligibleWord {
   tokenIndex: number;
+  word: string;
+  displayText: string;
   startOffset: number;
   endOffset: number;
 }
@@ -168,10 +173,10 @@ export class PracticeComponent implements OnInit {
     this.showPendingAnswers = false;
     const tokens = this.tokenizeVerse(selectedVerse.content);
     const eligibleWords = this.collectEligibleWords(tokens);
-    const selectedBlankIndices = this.selectRandomBlankIndices(eligibleWords, this.hiddenWordCount);
+    const selectedBlankWords = this.selectRandomBlankWords(eligibleWords, this.hiddenWordCount);
     const blankIndexByTokenIndex = new Map<number, number>();
 
-    selectedBlankIndices.forEach((tokenIndex, blankIndex) => {
+    selectedBlankWords.forEach(({ tokenIndex }, blankIndex) => {
       blankIndexByTokenIndex.set(tokenIndex, blankIndex);
     });
 
@@ -187,8 +192,9 @@ export class PracticeComponent implements OnInit {
         blankIndex: blankIndexByTokenIndex.get(index),
       };
     });
-    this.blanks = selectedBlankIndices.map((tokenIndex) => ({
-      word: tokens[tokenIndex].text,
+    this.blanks = selectedBlankWords.map(({ word, displayText }) => ({
+      word,
+      displayText,
       status: 'pending',
       userAnswer: '',
     }));
@@ -199,9 +205,46 @@ export class PracticeComponent implements OnInit {
   }
 
   private tokenizeVerse(content: string): VerseToken[] {
-    return (content.match(/(\s+|[^\s]+)/g) ?? []).map((token) =>
-      /\s+/.test(token) ? { kind: 'space', text: token } : { kind: 'text', text: token },
-    );
+    return (content.match(/(\s+|[^\s]+)/g) ?? []).flatMap((token) => {
+      if (/\s+/.test(token)) {
+        return [{ kind: 'space', text: token }];
+      }
+
+      return this.tokenizeWordSegment(token);
+    });
+  }
+
+  private tokenizeWordSegment(token: string): VerseToken[] {
+    const tokens: VerseToken[] = [];
+    let lastIndex = 0;
+
+    for (const match of token.matchAll(BLANK_MARKER_PATTERN)) {
+      const matchIndex = match.index ?? 0;
+      const prefix = token.slice(lastIndex, matchIndex).replace(/\*/g, '');
+      const markedWord = match[1]?.trim() ?? '';
+
+      if (prefix) {
+        tokens.push({ kind: 'text', text: prefix });
+      }
+
+      if (markedWord) {
+        tokens.push({ kind: 'text', text: markedWord, markedWord });
+      }
+
+      lastIndex = matchIndex + match[0].length;
+    }
+
+    const suffix = token.slice(lastIndex).replace(/\*/g, '');
+    if (suffix) {
+      tokens.push({ kind: 'text', text: suffix });
+    }
+
+    if (tokens.length) {
+      return tokens;
+    }
+
+    const sanitizedToken = token.replace(/\*/g, '');
+    return sanitizedToken ? [{ kind: 'text', text: sanitizedToken }] : [];
   }
 
   private collectEligibleWords(tokens: VerseToken[]): EligibleWord[] {
@@ -216,11 +259,13 @@ export class PracticeComponent implements OnInit {
         return [];
       }
 
-      return this.isEligibleWord(token.text) ? [{ tokenIndex, startOffset, endOffset }] : [];
+      return token.markedWord
+        ? [{ tokenIndex, word: token.markedWord, displayText: token.text, startOffset, endOffset }]
+        : [];
     });
   }
 
-  private selectRandomBlankIndices(eligibleWords: EligibleWord[], requestedBlankCount: number): number[] {
+  private selectRandomBlankWords(eligibleWords: EligibleWord[], requestedBlankCount: number): EligibleWord[] {
     const orderedWords = [...eligibleWords].sort((left, right) => left.startOffset - right.startOffset);
     const maxRequestedBlankCount = Math.min(requestedBlankCount, orderedWords.length);
 
@@ -228,12 +273,13 @@ export class PracticeComponent implements OnInit {
       const selection = this.pickWordsWithMinimumDistance(orderedWords, blankCount);
 
       if (selection) {
-        return selection.map(({ tokenIndex }) => tokenIndex).sort((left, right) => left - right);
+        return selection.sort((left, right) => left.tokenIndex - right.tokenIndex);
       }
     }
 
     return [];
   }
+
 
   private pickWordsWithMinimumDistance(words: EligibleWord[], blankCount: number): EligibleWord[] | null {
     const failedStates = new Set<string>();
@@ -289,9 +335,6 @@ export class PracticeComponent implements OnInit {
     return trySelect(0, blankCount, null);
   }
 
-  private isEligibleWord(word: string): boolean {
-    return /^[\p{L}\p{N}]{5,}$/u.test(word);
-  }
 
   private normalizeWord(word: string): string {
     return word.trim().toLocaleLowerCase('hu-HU').normalize('NFKC');
