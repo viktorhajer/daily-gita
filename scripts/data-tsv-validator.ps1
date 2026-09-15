@@ -6,6 +6,28 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$AllowedCategories = @(
+    'Béke keresése',
+    'Büszkeség',
+    'Bűntudat',
+    'Csapongó elme',
+    'Demotiváció',
+    'Düh',
+    'Elengedés',
+    'Elhagyatottság',
+    'Félelem',
+    'Halál',
+    'Idő',
+    'Irigység',
+    'Kapzsiság',
+    'Magány',
+    'Megbocsátás',
+    'Reménytelenség',
+    'Vágy',
+    'Változás',
+    'Zavarodottság'
+)
+
 function Resolve-DataFilePath {
     param(
         [string]$InputPath
@@ -47,8 +69,23 @@ function Test-CategoryField {
         [string]$Value
     )
 
-    $allowedPattern = '(?:Reménytelenség|Zavarodottság|Halál)'
-    return [regex]::IsMatch($Value, "^$allowedPattern(?:, ?$allowedPattern)*$")
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return $false
+    }
+
+    $categories = @($Value.Split(',') | ForEach-Object { $_.Trim() })
+
+    if ($categories.Count -eq 0) {
+        return $false
+    }
+
+    foreach ($category in $categories) {
+        if ([string]::IsNullOrWhiteSpace($category) -or $AllowedCategories -notcontains $category) {
+            return $false
+        }
+    }
+
+    return $true
 }
 
 function Get-ContentFieldErrors {
@@ -131,7 +168,7 @@ for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
     }
 
     if (-not (Test-CategoryField -Value $categoryValue)) {
-        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A harmadik oszlop csak a következő kategóriákat tartalmazhatja vesszővel elválasztva: Reménytelenség, Zavarodottság, Halál.'
+        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message ("A harmadik oszlop csak a következő kategóriákat tartalmazhatja vesszővel elválasztva: {0}." -f ($AllowedCategories -join ', '))
     }
 
     foreach ($message in (Get-ContentFieldErrors -Value $textValue)) {
