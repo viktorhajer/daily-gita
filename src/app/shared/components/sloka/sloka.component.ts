@@ -179,6 +179,6 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   get sanskritDialogTitle(): string {
-    return 'Szanszkrit szöveg';
+    return 'Szanszkrit';
   }
 }

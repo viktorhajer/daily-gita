@@ -45,9 +45,14 @@
 	</div>
 
 	<form class="answer-panel" *ngIf="!isCompleted; else completedState" (ngSubmit)="submitAnswer()">
-	  <label class="answer-label" for="practice-answer">
-      Enter the missing word.
-	  </label>
+	  <div class="answer-label-row">
+	    <label class="answer-label" for="practice-answer">
+	      Add meg a hiányzó szót.
+	    </label>
+	    <span class="answer-help-button" (click)="openInfoModal()">
+	      ?
+	    </span>
+	  </div>
 
 	  <div class="answer-row">
 		<input
@@ -57,7 +62,9 @@
 		  [(ngModel)]="currentAnswer"
 		  [disabled]="!hasActiveBlank"
 		/>
-      <button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">Next</button>
+      <button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">
+		    {{ submitButtonLabel }}
+      </button>
       <button
         class="reveal-button"
         type="button"
@@ -72,18 +79,25 @@
         (keydown.enter)="startRevealPendingBlanks()"
         (keyup.enter)="stopRevealPendingBlanks()"
       >
-        Reveal
+		Felfedés
       </button>
-      <button class="restart-button" type="button" (click)="startNewRound()">New</button>
+      <button class="restart-button" type="button" (click)="startNewRound()">Új</button>
 	  </div>
 	</form>
 
 	<ng-template #completedState>
 	  <div class="answer-panel answer-panel--completed">
-		<button type="button" class="restart-button" (click)="restartPractice()">Restart</button>
-		<button type="button" class="restart-button" (click)="startNewRound()">New</button>
+		<button type="button" class="restart-button" (click)="restartPractice()">Újra</button>
+		<button type="button" class="restart-button" (click)="startNewRound()">Új</button>
 	  </div>
 	</ng-template>
+
+	<app-modal
+	  [isOpen]="isInfoModalOpen"
+	  [title]="infoModalTitle"
+	  [text]="infoModalText"
+	  (close)="closeInfoModal()"
+	></app-modal>
   </section>
 </div>
 

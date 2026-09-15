@@ -10,7 +10,7 @@ export class ModalComponent {
   @Input() isOpen = false;
   @Input() title = '';
   @Input() text = '';
-  @Input() closeLabel = 'Close';
+  @Input() closeLabel = 'Bezárás';
   @Output() close = new EventEmitter<void>();
 
   @HostListener('document:keydown.escape')

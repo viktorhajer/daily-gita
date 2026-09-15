@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
-import { normalizePracticeWord } from './practice-word.util';
 import { selectDifferentVerse } from './practice-round.util';
+import { normalizePracticeWord } from './practice-word.util';
 
 type TokenKind = 'text' | 'space' | 'blank';
 type SelectionBranch = 'include' | 'skip';
@@ -53,6 +53,7 @@ export class PracticeComponent implements OnInit {
   currentAnswer = '';
   isCompleted = false;
   showPendingAnswers = false;
+  isInfoModalOpen = false;
 
   async ngOnInit(): Promise<void> {
     const routeSloka = this.resolveVerseFromRoute();
@@ -60,10 +61,12 @@ export class PracticeComponent implements OnInit {
       this.initVerseTokens(routeSloka);
       return;
     }
+
     if (this.slokaService.lastViewedSloka) {
       this.initVerseTokens(this.slokaService.lastViewedSloka);
       return;
     }
+
     this.startNewRound();
   }
 
@@ -79,6 +82,24 @@ export class PracticeComponent implements OnInit {
     return this.blanks.some((blank) => blank.status === 'pending');
   }
 
+  get infoModalTitle(): string {
+    return 'Információ';
+  }
+
+  get infoModalText(): string {
+    return [
+      'A kis és nagybetű valamint az ékezet nem számít. A továbblépéshez az Ugrik vagy Validál gombokra kell kattintani.',
+      '',
+      'A megoldás megtekintéséhez tartsd folyamatosan lenyomva a Felfedés gombot.',
+      '',
+      'Tipp: az üres hely szélessége tükrözi a kimaradt szó hosszát.',
+    ].join('\n');
+  }
+
+  get submitButtonLabel(): string {
+    return this.currentAnswer.trim() ? 'Validál' : 'Ugrik';
+  }
+
   restartPractice(): void {
     this.stopRevealPendingBlanks();
 
@@ -86,6 +107,7 @@ export class PracticeComponent implements OnInit {
       this.startNewRound();
       return;
     }
+
     this.initVerseTokens(this.verse);
   }
 
@@ -165,7 +187,16 @@ export class PracticeComponent implements OnInit {
       this.isCompleted = true;
       return;
     }
+
     this.initVerseTokens(selectedVerse);
+  }
+
+  openInfoModal(): void {
+    this.isInfoModalOpen = true;
+  }
+
+  closeInfoModal(): void {
+    this.isInfoModalOpen = false;
   }
 
   private initVerseTokens(selectedVerse: SlokaModel): void {
@@ -194,6 +225,7 @@ export class PracticeComponent implements OnInit {
         blankIndex: blankIndexByTokenIndex.get(index),
       };
     });
+
     this.blanks = selectedBlankWords.map(({ word, displayText }) => ({
       word,
       displayText,
@@ -281,7 +313,6 @@ export class PracticeComponent implements OnInit {
 
     return [];
   }
-
 
   private pickWordsWithMinimumDistance(words: EligibleWord[], blankCount: number): EligibleWord[] | null {
     const failedStates = new Set<string>();

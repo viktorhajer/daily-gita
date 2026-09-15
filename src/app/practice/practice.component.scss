@@ -140,6 +140,38 @@
   font-size: 0.8rem;
 }
 
+.answer-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.answer-help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #73aadb;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  padding: 0;
+  background: #d9ecff;
+  color: #1b4d7c;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease;
+}
+
+.answer-help-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
 .answer-row {
   display: flex;
   gap: 0.4rem;
@@ -163,7 +195,7 @@
   padding: 0.85rem 1.2rem;
   font-weight: 700;
   cursor: pointer;
-  width: 85px;
+  width: 90px;
   transition:
 	transform 180ms ease,
 	opacity 180ms ease,
