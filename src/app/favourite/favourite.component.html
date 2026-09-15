@@ -1,6 +1,6 @@
 <div class="content">
   @if (sloka) {
-    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()" [fullScreen]="isAutoRotating"></app-sloka>
+    <app-sloka [text]="text" [sloka]="sloka" [fullScreen]="isAutoRotating"></app-sloka>
   } @else {
     <p class="empty-state">No favourite sloka selected yet.</p>
   }

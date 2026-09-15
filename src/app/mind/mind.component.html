@@ -11,7 +11,7 @@
       }
     </div>
   } @else {
-    <app-sloka [text]="text" [sloka]="sloka" (click)="showNext()"></app-sloka>
+    <app-sloka [text]="text" [sloka]="sloka"></app-sloka>
 
     <div class="footer">
       <button (click)="showPrevious()" class="html-icon" [disabled]="filteredTexts.length < 2" aria-label="Previous" title="Previous">
