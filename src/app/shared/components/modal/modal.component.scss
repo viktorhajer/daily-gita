@@ -1,0 +1,56 @@
+.sanskrit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 1200;
+
+  &.sanskrit-modal-backdrop--open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.sanskrit-modal {
+  width: min(680px, 95vw);
+  max-height: 80vh;
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: #fffdf8;
+  box-shadow: 0 12px 35px rgba(34, 34, 34, 0.2);
+  padding: 16px 12px;
+}
+
+.sanskrit-modal__title {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  color: #316ea8;
+}
+
+.sanskrit-modal__content {
+  margin: 0 0 18px;
+  font-family: serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2c2c2c;
+  white-space: pre-wrap;
+}
+
+.sanskrit-modal__close {
+  border: none;
+  width: 85px;
+  font-weight: 600;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+
+

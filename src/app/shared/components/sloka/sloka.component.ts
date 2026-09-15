@@ -26,6 +26,7 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
   isVisible = false;
   isExiting = false;
   isTransitioning = false;
+  isSanskritPopupOpen = false;
 
   private readonly animationDuration = 500;
   private readonly cdr = inject(ChangeDetectorRef);
@@ -155,5 +156,29 @@ export class SlokaComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private sanitizeText(text: string | null | undefined): string {
     return (text ?? '').replace(/\*/g, '');
+  }
+
+  openSanskritPopup() {
+    if (!this.hasSanskritText) {
+      return;
+    }
+
+    this.isSanskritPopupOpen = true;
+  }
+
+  closeSanskritPopup() {
+    this.isSanskritPopupOpen = false;
+  }
+
+  get sanskritText(): string {
+    return this.displayedSloka?.sanskrit?.trim() ?? '';
+  }
+
+  get hasSanskritText(): boolean {
+    return !!this.displayedSloka?.sanskrit?.trim();
+  }
+
+  get sanskritDialogTitle(): string {
+    return 'Szanszkrit szöveg';
   }
 }

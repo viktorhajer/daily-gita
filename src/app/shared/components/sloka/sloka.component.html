@@ -1,6 +1,11 @@
 <div class="text-container" [class.full-screen]="fullScreen">
   <div class="quote-mark" [class.text--visible]="isVisible" [class.text--exiting]="isExiting">“</div>
-  <div class="text" [class.text--visible]="isVisible" [class.text--exiting]="isExiting" [class.text--compact]="displayedText.length > 275">
+  <div class="text"
+       [class.text--visible]="isVisible"
+       [class.text--exiting]="isExiting"
+       [class.text--compact]="displayedText.length > 275"
+       [class.text--clickable]="hasSanskritText"
+       (click)="openSanskritPopup()">
     {{ displayedText }}”
   </div>
   <img src="assets/images/decoration_icon_main.png" alt="Line" class="decoration-main"
@@ -9,3 +14,12 @@
     Bhagavad-gítá {{ displayedSloka?.chapter }}.{{ displayedSloka?.index }}
   </div>
 </div>
+
+<app-modal
+  [isOpen]="isSanskritPopupOpen"
+  [title]="sanskritDialogTitle"
+  [text]="sanskritText"
+  closeLabel="Close"
+  (close)="closeSanskritPopup()">
+</app-modal>
+

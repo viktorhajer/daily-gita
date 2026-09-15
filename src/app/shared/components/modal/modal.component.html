@@ -1,0 +1,12 @@
+<div class="sanskrit-modal-backdrop"
+     [class.sanskrit-modal-backdrop--open]="isOpen"
+     [attr.aria-hidden]="!isOpen"
+     (click)="onBackdropClick()">
+  <div class="sanskrit-modal" (click)="onModalClick($event)">
+    <h3 class="sanskrit-modal__title">{{ title }}</h3>
+    <p class="sanskrit-modal__content">{{ text }}</p>
+    <button type="button" class="sanskrit-modal__close is-selected" (click)="close.emit()">{{ closeLabel }}</button>
+  </div>
+</div>
+
+
