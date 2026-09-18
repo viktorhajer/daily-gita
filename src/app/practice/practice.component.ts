@@ -82,6 +82,14 @@ export class PracticeComponent implements OnInit {
     return this.blanks.some((blank) => blank.status === 'pending');
   }
 
+  get correctAnswerCount(): number {
+    return this.blanks.filter((blank) => blank.status === 'correct').length;
+  }
+
+  get totalBlankCount(): number {
+    return this.blanks.length;
+  }
+
   get infoModalTitle(): string {
     return 'Információ';
   }
@@ -96,9 +104,6 @@ export class PracticeComponent implements OnInit {
     ].join('\n');
   }
 
-  get submitButtonLabel(): string {
-    return this.currentAnswer.trim() ? 'Validál' : 'Ugrik';
-  }
 
   restartPractice(): void {
     this.stopRevealPendingBlanks();

@@ -89,13 +89,14 @@
 	</form>
 
 	<ng-template #completedState>
+    <p class="answer-summary">Eredmény: {{ correctAnswerCount }} / {{ totalBlankCount }}</p>
 	  <div class="answer-panel answer-panel--completed">
-		<button type="button" class="restart-button icon-size" (click)="restartPractice()">
-      <img src="assets/images/practice_restart_icon.png"/>
-    </button>
-		<button type="button" class="new-round-button icon-size" (click)="startNewRound()">
-      <img src="assets/images/practice_new_icon.png"/>
-    </button>
+      <button type="button" class="restart-button icon-size" (click)="restartPractice()">
+        <img src="assets/images/practice_restart_icon.png"/>
+      </button>
+      <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+        <img src="assets/images/practice_new_icon.png"/>
+      </button>
 	  </div>
 	</ng-template>
 
