@@ -62,12 +62,11 @@
 		  [(ngModel)]="currentAnswer"
 		  [disabled]="!hasActiveBlank"
 		/>
-      <button class="answer-button is-selected" type="submit" [disabled]="!canSubmit()">
-		    {{ submitButtonLabel }}
+      <button class="answer-button icon-size" type="submit" [disabled]="!canSubmit()">
+		    <img src="assets/images/practice_next_icon.png"/>
       </button>
       <button
-        class="reveal-button"
-        type="button"
+        class="reveal-button icon-size" type="button"
         [disabled]="!hasPendingBlanks"
         (pointerdown)="startRevealPendingBlanks()"
         (pointerup)="stopRevealPendingBlanks()"
@@ -77,18 +76,26 @@
         (keydown.space)="startRevealPendingBlanks()"
         (keyup.space)="stopRevealPendingBlanks()"
         (keydown.enter)="startRevealPendingBlanks()"
-        (keyup.enter)="stopRevealPendingBlanks()"
-      >
-		Felfedés
+        (keyup.enter)="stopRevealPendingBlanks()">
+        <img src="assets/images/practice_show_icon.png"/>
       </button>
-      <button class="restart-button" type="button" (click)="startNewRound()">Új</button>
+      <button type="button" class="restart-button icon-size" (click)="restartPractice()">
+        <img src="assets/images/practice_restart_icon.png"/>
+      </button>
+      <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+        <img src="assets/images/practice_new_icon.png"/>
+      </button>
 	  </div>
 	</form>
 
 	<ng-template #completedState>
 	  <div class="answer-panel answer-panel--completed">
-		<button type="button" class="restart-button" (click)="restartPractice()">Újra</button>
-		<button type="button" class="restart-button" (click)="startNewRound()">Új</button>
+		<button type="button" class="restart-button icon-size" (click)="restartPractice()">
+      <img src="assets/images/practice_restart_icon.png"/>
+    </button>
+		<button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+      <img src="assets/images/practice_new_icon.png"/>
+    </button>
 	  </div>
 	</ng-template>
 

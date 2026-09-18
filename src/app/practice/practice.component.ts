@@ -127,6 +127,8 @@ export class PracticeComponent implements OnInit {
     this.currentAnswer = '';
     this.currentBlankIndex += 1;
 
+    console.log('submit');
+
     if (this.currentBlankIndex >= this.blanks.length) {
       this.isCompleted = true;
     }
@@ -236,6 +238,8 @@ export class PracticeComponent implements OnInit {
     if (!this.blanks.length) {
       this.isCompleted = true;
     }
+
+    console.log(this);
   }
 
   private tokenizeVerse(content: string): VerseToken[] {
