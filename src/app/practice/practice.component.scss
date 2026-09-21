@@ -19,12 +19,12 @@
 }
 
 .practice-header {
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
 }
 
 .practice-title {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 20px;
   color: #316ea8;
 }
 
@@ -150,14 +150,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #73aadb;
+  border: 3px solid #79a7d3;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   padding: 0;
-  background: #d9ecff;
-  color: #1b4d7c;
-  font-size: 0.85rem;
+  background: #79a7d3;
+  color: #ffffff;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -196,6 +196,8 @@
   width: 50px;
   height: 38px;
   min-height: auto;
+  background: #79a7d3;
+  border: none;
   transition:
 	transform 180ms ease,
 	opacity 180ms ease,
@@ -210,6 +212,16 @@
   img {
     width: 20px;
   }
+}
+
+.new-round-button {
+  img {
+    width: 28px;
+  }
+}
+
+.answer-button {
+  background: #e3b56e;
 }
 
 .answer-button:hover,
