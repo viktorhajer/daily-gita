@@ -25,10 +25,11 @@
 .practice-title {
   margin: 0;
   font-size: 20px;
-  color: #316ea8;
+  color: #6b91b4;
 }
 
 .verse {
+  color: #1c255d;
   padding: 1rem 0;
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.06);
@@ -63,7 +64,7 @@
 }
 
 .verse-blank--active {
-  background: #f0c524;
+  background: #f6e2af;
   border-color: #f6dd69;
   color: #2f2400;
 }
@@ -71,19 +72,19 @@
 .verse-blank--revealed {
   background: #d9ecff;
   border-color: #8fc2f3;
-  color: #1b4d7c;
+  color: #3b71a5;
 }
 
 .verse-blank--correct {
-  background: #88b398;
+  background: #dfe6dc;
   border-color: #55c975;
-  color: #ffffff;
+  color: #839883;
 }
 
 .verse-blank--incorrect {
-  background: #bb4242;
+  background: #f7e2dd;
   border-color: #db6666;
-  color: #ffffff;
+  color: #bb7c7e;
 }
 
 .blank-placeholder {
@@ -115,12 +116,12 @@
 }
 
 .blank-user {
-  color: #ffb7b7;
+  color: #bb7c7e;
   text-decoration: line-through;
 }
 
 .blank-correction {
-  color: #ffffff;
+  color: #bb7c7e;
   font-weight: 700;
 }
 
@@ -150,12 +151,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid #79a7d3;
+  border: 3px solid #6b91b4;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   padding: 0;
-  background: #79a7d3;
+  background: #6b91b4;
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -196,7 +197,7 @@
   width: 50px;
   height: 38px;
   min-height: auto;
-  background: #79a7d3;
+  background: #6b91b4;
   border: none;
   transition:
 	transform 180ms ease,
