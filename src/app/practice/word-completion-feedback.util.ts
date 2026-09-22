@@ -1,4 +1,4 @@
-export function getPracticeFeedbackMessage(
+export function getWordCompletionFeedbackMessage(
   correctAnswerCount: number,
   totalBlankCount: number,
 ): string {

@@ -72,7 +72,9 @@ export class MindComponent {
       return;
     }
 
-    if (resetIndex || this.currentIndex >= this.filteredTexts.length) {
+    if (resetIndex) {
+      this.currentIndex = Math.floor(Math.random() * this.filteredTexts.length);
+    } else if (this.currentIndex >= this.filteredTexts.length) {
       this.currentIndex = 0;
     }
 

@@ -20,7 +20,7 @@ $AllowedCategories = @(
     'Idő',
     'Irigység',
     'Kapzsiság',
-    'Magány',
+    'Magányosság',
     'Megbocsátás',
     'Reménytelenség',
     'Vágy',

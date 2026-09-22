@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
-import { getPracticeFeedbackMessage } from './practice-feedback.util';
-import { selectDifferentVerse } from './practice-round.util';
-import { normalizePracticeWord } from './practice-word.util';
+import { getWordCompletionFeedbackMessage } from './word-completion-feedback.util';
+import { selectDifferentWordCompletionVerse } from './word-completion-round.util';
+import { normalizeWordCompletionWord } from './word-completion-word.util';
 
 type TokenKind = 'text' | 'space' | 'blank';
 type SelectionBranch = 'include' | 'skip';
@@ -36,12 +36,12 @@ interface EligibleWord {
 }
 
 @Component({
-  selector: 'app-practice',
+  selector: 'app-word-completion',
   standalone: false,
-  templateUrl: './practice.component.html',
-  styleUrl: './practice.component.scss',
+  templateUrl: './word-completion.component.html',
+  styleUrl: './word-completion.component.scss',
 })
-export class PracticeComponent implements OnInit {
+export class WordCompletionComponent implements OnInit {
   readonly slokaService = inject(SlokaService);
   private readonly route = inject(ActivatedRoute);
 
@@ -92,7 +92,7 @@ export class PracticeComponent implements OnInit {
   }
 
   get completionFeedbackMessage(): string {
-    return getPracticeFeedbackMessage(this.correctAnswerCount, this.totalBlankCount);
+    return getWordCompletionFeedbackMessage(this.correctAnswerCount, this.totalBlankCount);
   }
 
   get infoModalTitle(): string {
@@ -110,7 +110,7 @@ export class PracticeComponent implements OnInit {
   }
 
 
-  restartPractice(): void {
+  restartWordCompletion(): void {
     this.stopRevealPendingBlanks();
 
     if (!this.verse) {
@@ -188,7 +188,7 @@ export class PracticeComponent implements OnInit {
   startNewRound(): void {
     this.stopRevealPendingBlanks();
 
-    const selectedVerse = selectDifferentVerse(this.slokaService.texts, this.verse);
+    const selectedVerse = selectDifferentWordCompletionVerse(this.slokaService.texts, this.verse);
     if (!selectedVerse) {
       this.verse = null;
       this.verseTokens = [];
@@ -379,7 +379,7 @@ export class PracticeComponent implements OnInit {
 
 
   private normalizeWord(word: string): string {
-    return normalizePracticeWord(word);
+    return normalizeWordCompletionWord(word);
   }
 
   private shuffle<T>(items: T[]): T[] {

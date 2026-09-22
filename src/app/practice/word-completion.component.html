@@ -79,7 +79,7 @@
         (keyup.enter)="stopRevealPendingBlanks()">
 		<img src="assets/images/practice_show_icon.png" alt="Felfedés"/>
       </button>
-      <button type="button" class="restart-button icon-size" (click)="restartPractice()">
+	  <button type="button" class="restart-button icon-size" (click)="restartWordCompletion()">
 		<img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
       </button>
       <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
@@ -91,7 +91,7 @@
 	<ng-template #completedState>
 			<p class="answer-summary">{{ completionFeedbackMessage }}</p>
 	  <div class="answer-panel answer-panel--completed">
-      <button type="button" class="restart-button icon-size" (click)="restartPractice()">
+	  <button type="button" class="restart-button icon-size" (click)="restartWordCompletion()">
 				<img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
       </button>
       <button type="button" class="new-round-button icon-size" (click)="startNewRound()">

@@ -3,22 +3,22 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { PracticeComponent } from './practice.component';
+import { WordCompletionComponent } from './word-completion.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: PracticeComponent,
+    component: WordCompletionComponent,
   },
   {
     path: ':chapter/:index',
-    component: PracticeComponent,
+    component: WordCompletionComponent,
   },
 ];
 
 @NgModule({
-  declarations: [PracticeComponent],
+  declarations: [WordCompletionComponent],
   imports: [FormsModule, SharedModule, RouterModule.forChild(routes)],
 })
 export class PracticeModule {}

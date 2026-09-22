@@ -1,6 +1,6 @@
 import { SlokaModel } from '../model/sloka.model';
 
-export function selectDifferentVerse(
+export function selectDifferentWordCompletionVerse(
   texts: SlokaModel[],
   currentVerse: SlokaModel | null,
 ): SlokaModel | undefined {

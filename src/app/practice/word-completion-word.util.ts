@@ -1,4 +1,4 @@
-export function normalizePracticeWord(word: string): string {
+export function normalizeWordCompletionWord(word: string): string {
   return word
     .trim()
     .toLocaleLowerCase('hu-HU')
