@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../../model/sloka.model';
 import { SlokaService } from '../../services/sloka.service';
-import { getWordCompletionFeedbackMessage } from './word-completion-feedback.util';
-import { selectDifferentWordCompletionVerse } from './word-completion-round.util';
-import { normalizeWordCompletionWord } from './word-completion-word.util';
+import { getWordCompletionFeedbackMessage } from '../utils/feedback.util';
+import { selectDifferentWordCompletionVerse } from '../utils/round.util';
+import { normalizeWordCompletionWord } from '../utils/word-normalize.util';
 
 type TokenKind = 'text' | 'space' | 'blank';
 type SelectionBranch = 'include' | 'skip';
