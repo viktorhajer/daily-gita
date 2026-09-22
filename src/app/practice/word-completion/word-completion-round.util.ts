@@ -1,4 +1,4 @@
-import { SlokaModel } from '../model/sloka.model';
+import { SlokaModel } from '../../model/sloka.model';
 
 export function selectDifferentWordCompletionVerse(
   texts: SlokaModel[],

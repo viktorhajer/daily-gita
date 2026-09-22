@@ -3,22 +3,36 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from '../shared/shared.module';
-import { WordCompletionComponent } from './word-completion.component';
+import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
+import { PracticeComponent } from './practice.component';
+import { WordCompletionComponent } from './word-completion/word-completion.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    component: PracticeComponent,
+  },
+  {
+    path: 'word-completion',
     component: WordCompletionComponent,
   },
   {
-    path: ':chapter/:index',
+    path: 'word-completion/:chapter/:index',
     component: WordCompletionComponent,
+  },
+  {
+    path: 'multiple-choice',
+    component: MultipleChoiceComponent,
+  },
+  {
+    path: ':chapter/:index',
+    redirectTo: 'word-completion/:chapter/:index',
   },
 ];
 
 @NgModule({
-  declarations: [WordCompletionComponent],
+  declarations: [PracticeComponent, WordCompletionComponent, MultipleChoiceComponent],
   imports: [FormsModule, SharedModule, RouterModule.forChild(routes)],
 })
 export class PracticeModule {}

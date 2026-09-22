@@ -18,7 +18,7 @@
       <button (click)="navigateFromMenu('/favourite')" [class.is-selected]="router.url === '/favourite'" type="button">
         <div class="button-icon fav-icon">&#9734;</div>
       </button>
-      <button (click)="navigateFromMenu('/practice')" [class.is-selected]="router.url === '/practice'" type="button">
+      <button (click)="navigateFromMenu('/practice')" [class.is-selected]="router.url.startsWith('/practice')" type="button">
         <div class="button-icon button-icon-practice"></div>
       </button>
     </div>
