@@ -6,33 +6,18 @@ import { SlokaService } from '../../services/sloka.service';
 import { getWordCompletionFeedbackMessage } from '../utils/feedback.util';
 import { selectDifferentWordCompletionVerse } from '../utils/round.util';
 import { normalizeWordCompletionWord } from '../utils/word-normalize.util';
-
-type TokenKind = 'text' | 'space' | 'blank';
-type SelectionBranch = 'include' | 'skip';
-
-const MIN_BLANK_DISTANCE_CHARACTERS = 5;
-const BLANK_MARKER_PATTERN = /\*([^*]+)\*/gu;
-
-interface VerseToken {
-  kind: TokenKind;
-  text: string;
-  blankIndex?: number;
-  markedWord?: string;
-}
+import {
+  PracticeVerseToken,
+  collectPracticeEligibleWords,
+  selectPracticeBlankWords,
+  tokenizePracticeVerse,
+} from '../utils/verse.util';
 
 interface BlankState {
   word: string;
   displayText: string;
   status: 'pending' | 'correct' | 'incorrect';
   userAnswer: string;
-}
-
-interface EligibleWord {
-  tokenIndex: number;
-  word: string;
-  displayText: string;
-  startOffset: number;
-  endOffset: number;
 }
 
 @Component({
@@ -48,7 +33,7 @@ export class WordCompletionComponent implements OnInit {
   @Input() hiddenWordCount = 5;
 
   verse: SlokaModel | null = null;
-  verseTokens: VerseToken[] = [];
+  verseTokens: PracticeVerseToken[] = [];
   blanks: BlankState[] = [];
   currentBlankIndex = 0;
   currentAnswer = '';
@@ -213,9 +198,9 @@ export class WordCompletionComponent implements OnInit {
     this.currentBlankIndex = 0;
     this.isCompleted = false;
     this.showPendingAnswers = false;
-    const tokens = this.tokenizeVerse(selectedVerse.content);
-    const eligibleWords = this.collectEligibleWords(tokens);
-    const selectedBlankWords = this.selectRandomBlankWords(eligibleWords, this.hiddenWordCount);
+    const tokens = tokenizePracticeVerse(selectedVerse.content);
+    const eligibleWords = collectPracticeEligibleWords(tokens);
+    const selectedBlankWords = selectPracticeBlankWords(eligibleWords, this.hiddenWordCount);
     const blankIndexByTokenIndex = new Map<number, number>();
 
     selectedBlankWords.forEach(({ tokenIndex }, blankIndex) => {
@@ -247,151 +232,10 @@ export class WordCompletionComponent implements OnInit {
     }
   }
 
-  private tokenizeVerse(content: string): VerseToken[] {
-    return (content.match(/(\s+|[^\s]+)/g) ?? []).flatMap((token) => {
-      if (/\s+/.test(token)) {
-        return [{ kind: 'space', text: token }];
-      }
-
-      return this.tokenizeWordSegment(token);
-    });
-  }
-
-  private tokenizeWordSegment(token: string): VerseToken[] {
-    const tokens: VerseToken[] = [];
-    let lastIndex = 0;
-
-    for (const match of token.matchAll(BLANK_MARKER_PATTERN)) {
-      const matchIndex = match.index ?? 0;
-      const prefix = token.slice(lastIndex, matchIndex).replace(/\*/g, '');
-      const markedWord = match[1]?.trim() ?? '';
-
-      if (prefix) {
-        tokens.push({ kind: 'text', text: prefix });
-      }
-
-      if (markedWord) {
-        tokens.push({ kind: 'text', text: markedWord, markedWord });
-      }
-
-      lastIndex = matchIndex + match[0].length;
-    }
-
-    const suffix = token.slice(lastIndex).replace(/\*/g, '');
-    if (suffix) {
-      tokens.push({ kind: 'text', text: suffix });
-    }
-
-    if (tokens.length) {
-      return tokens;
-    }
-
-    const sanitizedToken = token.replace(/\*/g, '');
-    return sanitizedToken ? [{ kind: 'text', text: sanitizedToken }] : [];
-  }
-
-  private collectEligibleWords(tokens: VerseToken[]): EligibleWord[] {
-    let currentOffset = 0;
-
-    return tokens.flatMap((token, tokenIndex) => {
-      const startOffset = currentOffset;
-      const endOffset = startOffset + token.text.length;
-      currentOffset = endOffset;
-
-      if (token.kind !== 'text') {
-        return [];
-      }
-
-      return token.markedWord
-        ? [{ tokenIndex, word: token.markedWord, displayText: token.text, startOffset, endOffset }]
-        : [];
-    });
-  }
-
-  private selectRandomBlankWords(eligibleWords: EligibleWord[], requestedBlankCount: number): EligibleWord[] {
-    const orderedWords = [...eligibleWords].sort((left, right) => left.startOffset - right.startOffset);
-    const maxRequestedBlankCount = Math.min(requestedBlankCount, orderedWords.length);
-
-    for (let blankCount = maxRequestedBlankCount; blankCount > 0; blankCount -= 1) {
-      const selection = this.pickWordsWithMinimumDistance(orderedWords, blankCount);
-
-      if (selection) {
-        return selection.sort((left, right) => left.tokenIndex - right.tokenIndex);
-      }
-    }
-
-    return [];
-  }
-
-  private pickWordsWithMinimumDistance(words: EligibleWord[], blankCount: number): EligibleWord[] | null {
-    const failedStates = new Set<string>();
-
-    const trySelect = (
-      index: number,
-      remaining: number,
-      previousWordEndOffset: number | null,
-    ): EligibleWord[] | null => {
-      if (remaining === 0) {
-        return [];
-      }
-
-      if (index >= words.length) {
-        return null;
-      }
-
-      const stateKey = `${index}|${remaining}|${previousWordEndOffset ?? -1}`;
-      if (failedStates.has(stateKey)) {
-        return null;
-      }
-
-      const currentWord = words[index];
-      const canInclude =
-        previousWordEndOffset === null ||
-        currentWord.startOffset - previousWordEndOffset >= MIN_BLANK_DISTANCE_CHARACTERS;
-      const branchOrder: SelectionBranch[] = canInclude
-        ? this.shuffle<SelectionBranch>(['include', 'skip'])
-        : ['skip'];
-
-      for (const branch of branchOrder) {
-        if (branch === 'include' && canInclude) {
-          const selectedTail = trySelect(index + 1, remaining - 1, currentWord.endOffset);
-
-          if (selectedTail) {
-            return [currentWord, ...selectedTail];
-          }
-        }
-
-        if (branch === 'skip') {
-          const skippedTail = trySelect(index + 1, remaining, previousWordEndOffset);
-
-          if (skippedTail) {
-            return skippedTail;
-          }
-        }
-      }
-
-      failedStates.add(stateKey);
-      return null;
-    };
-
-    return trySelect(0, blankCount, null);
-  }
-
-
   private normalizeWord(word: string): string {
     return normalizeWordCompletionWord(word);
   }
 
-  private shuffle<T>(items: T[]): T[] {
-    const result = [...items];
-
-    for (let index = result.length - 1; index > 0; index -= 1) {
-      const swapIndex = Math.floor(Math.random() * (index + 1));
-      [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
-    }
-
-    return result;
-  }
 
   private resolveVerseFromRoute(): SlokaModel | null {
     const chapterText =

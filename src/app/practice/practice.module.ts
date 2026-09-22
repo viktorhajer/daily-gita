@@ -26,6 +26,10 @@ const routes: Routes = [
     component: MultipleChoiceComponent,
   },
   {
+    path: 'multiple-choice/:chapter/:index',
+    component: MultipleChoiceComponent,
+  },
+  {
     path: ':chapter/:index',
     redirectTo: 'word-completion/:chapter/:index',
   },

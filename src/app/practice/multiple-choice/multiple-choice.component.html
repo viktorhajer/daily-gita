@@ -1,7 +1,78 @@
-<div class="multiple-choice-page">
-  <section class="multiple-choice-card">
-    <h1 class="multiple-choice-title">Szóválasztó</h1>
-    <p class="multiple-choice-description">Ez a gyakorlási mód hamarosan érkezik.</p>
+<div class="practice-page">
+  <section class="practice-card" *ngIf="verse">
+  <header class="practice-header">
+    <h1 class="practice-title">Bhagavad-gítá {{ verse.chapter }}.{{ verse.index }}</h1>
+  </header>
+
+  <div class="verse" aria-live="polite">
+    “<ng-container *ngFor="let token of verseTokens; trackBy: trackByIndex">
+    <span *ngIf="token.kind === 'space'" class="verse-space">{{ token.text }}</span>
+
+    <span *ngIf="token.kind === 'text'" class="verse-word">{{ token.text }}</span>
+
+    <ng-container *ngIf="token.kind === 'blank' && blankState(token.blankIndex) as blank">
+      <span
+      class="verse-blank"
+      [class.verse-blank--active]="isBlankActive(token.blankIndex ?? -1)"
+      [class.verse-blank--revealed]="shouldRevealBlank(token.blankIndex)"
+      [class.verse-blank--correct]="blank.status === 'correct'"
+      [class.verse-blank--incorrect]="blank.status === 'incorrect'"
+      [style.min-width.ch]="getBlankWidth(token.text)"
+      >
+      <ng-container [ngSwitch]="blank.status">
+        <ng-container *ngSwitchCase="'pending'">
+          <span *ngIf="shouldRevealBlank(token.blankIndex); else hiddenBlank" class="blank-result blank-result--revealed">
+          {{ blank.displayText }}
+        </span>
+
+        <ng-template #hiddenBlank>
+          <span class="blank-placeholder">&nbsp;</span>
+        </ng-template>
+        </ng-container>
+
+        <span *ngSwitchCase="'correct'" class="blank-result blank-result--correct">
+        {{ blank.userAnswer }}
+        </span>
+
+        <span *ngSwitchCase="'incorrect'" class="blank-result blank-result--incorrect">
+        <span class="blank-user">{{ blank.userAnswer }}</span>
+        <span class="blank-correction">{{ blank.displayText }}</span>
+        </span>
+      </ng-container>
+      </span>
+    </ng-container>
+    </ng-container>”
+  </div>
+
+  <form class="answer-panel" *ngIf="!isCompleted; else completedState" (ngSubmit)="$event.preventDefault()">
+    <div class="answer-label-row">
+      <label class="answer-label">Válassz egy lehetőséget!</label>
+    </div>
+
+    <div class="answer-options" *ngIf="activeBlank as blank">
+      <button
+        type="button"
+        class="choice-button"
+        *ngFor="let choice of blank.choices; trackBy: trackByIndex"
+        (click)="chooseAnswer(choice)"
+      >
+        {{ choice }}
+      </button>
+    </div>
+  </form>
+
+  <ng-template #completedState>
+    <p class="answer-summary">{{ completionFeedbackMessage }}</p>
+    <div class="answer-panel answer-panel--completed">
+      <button type="button" class="restart-button icon-size" (click)="restartMultipleChoice()">
+      <img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
+      </button>
+      <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+      <img src="assets/images/practice_cube_icon.png" alt="Új kör"/>
+      </button>
+    </div>
+  </ng-template>
+
   </section>
 </div>
 
