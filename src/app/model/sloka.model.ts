@@ -4,4 +4,5 @@ export class SlokaModel {
   categories: string[] = [];
   content = '';
   sanskrit?: string = '';
+  options?: string[][] = [];
 }

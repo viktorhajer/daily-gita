@@ -28,6 +28,9 @@ $AllowedCategories = @(
     'Zavarodottság'
 )
 
+$OptionsWordPattern = "[\p{L}][\p{L}\p{M}'’-]*"
+$OptionsFieldPattern = "^\[(?:\s*\[\s*$OptionsWordPattern(?:\s*,\s*$OptionsWordPattern)*\s*\]\s*(?:,\s*\[\s*$OptionsWordPattern(?:\s*,\s*$OptionsWordPattern)*\s*\]\s*)*)\]$"
+
 function Resolve-DataFilePath {
     param(
         [string]$InputPath
@@ -119,10 +122,49 @@ function Get-ContentFieldErrors {
     return $messages
 }
 
+function Test-OptionsField {
+    param(
+        [string]$Value
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return $true
+    }
+
+    return [System.Text.RegularExpressions.Regex]::IsMatch($Value.Trim(), $OptionsFieldPattern)
+}
+
+function Get-LineTextAndOptions {
+    param(
+        [string[]]$Columns
+    )
+
+    $columnValues = @($Columns)
+    $textColumns = @($columnValues)
+    $optionsValue = ''
+
+    if ($columnValues.Length -gt 0) {
+        $lastColumn = $columnValues[$columnValues.Length - 1].Trim()
+
+        if ([string]::IsNullOrWhiteSpace($lastColumn)) {
+            $textColumns = if ($columnValues.Length -gt 1) { @($columnValues[0..($columnValues.Length - 2)]) } else { @('') }
+        }
+        elseif (Test-OptionsField -Value $lastColumn) {
+            $optionsValue = $lastColumn
+            $textColumns = if ($columnValues.Length -gt 1) { @($columnValues[0..($columnValues.Length - 2)]) } else { @('') }
+        }
+    }
+
+    return [pscustomobject]@{
+        Text    = ($textColumns -join "`t").Trim()
+        Options = $optionsValue
+    }
+}
+
 $dataFilePath = Resolve-DataFilePath -InputPath $Path
 $fileContent = Get-Content -LiteralPath $dataFilePath -Raw -Encoding UTF8
 $normalizedContent = ($fileContent -replace '^\uFEFF', '') -replace "`r`n?", "`n"
-$lines = [System.Text.RegularExpressions.Regex]::Split($normalizedContent, "`n")
+$lines = @([System.Text.RegularExpressions.Regex]::Split($normalizedContent, "`n"))
 $errors = New-Object System.Collections.Generic.List[object]
 $seenRecord = $false
 
@@ -134,45 +176,71 @@ for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
         continue
     }
 
-    $columns = $line.Split("`t")
+    $columns = @($line.Split("`t"))
     $firstColumn = if ($columns.Count -gt 0) { $columns[0].Trim() } else { '' }
-    $looksLikeRecordLine = $line.Contains("`t") -or $firstColumn -match '^\d+$'
-    $hasAtLeastFourColumns = $columns.Count -ge 4
+    $isRecordStart =
+        $columns.Count -ge 4 -and
+        $firstColumn -match '^\d+$' -and
+        -not [string]::IsNullOrWhiteSpace($columns[1])
 
-    if (-not $hasAtLeastFourColumns) {
-        if (-not $seenRecord) {
-            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A sor nem érvényes rekordkezdet.'
-            continue
+    if (-not $seenRecord -and -not $isRecordStart) {
+        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A sor nem érvényes rekordkezdet.'
+        continue
+    }
+
+    if ($isRecordStart) {
+        $seenRecord = $true
+
+        $chapterValue = $columns[0].Trim()
+        $indexValue = $columns[1].Trim()
+        $categoryValue = $columns[2].Trim()
+        $textValue = $columns[3].Trim()
+        $tailFields = if ($columns.Count -gt 4) { @($columns[4..($columns.Count - 1)]) } else { @() }
+        $linePayload = Get-LineTextAndOptions -Columns $tailFields
+
+        if ($chapterValue -notmatch '^\d+$') {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'Az első oszlopnak egyetlen számnak kell lennie.'
         }
 
-        if ($looksLikeRecordLine) {
-            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A rekordsornak legalább 4 tabulátorral elválasztott oszlopot kell tartalmaznia.'
+        if ($indexValue -notmatch '^\d+$|^\d+-\d+$') {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A második oszlopnak egy számnak vagy X-Y formátumnak kell lennie.'
+        }
+
+        if (-not (Test-CategoryField -Value $categoryValue)) {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message ("A harmadik oszlop csak a következő kategóriákat tartalmazhatja vesszővel elválasztva: {0}." -f ($AllowedCategories -join ', '))
+        }
+
+        foreach ($message in (Get-ContentFieldErrors -Value $textValue)) {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message $message
+        }
+
+        if (@($tailFields).Length -gt 0) {
+            $tailFieldValues = @($tailFields)
+            $rawOptionsValue = $tailFieldValues[$tailFieldValues.Length - 1].Trim()
+            if (-not [string]::IsNullOrWhiteSpace($rawOptionsValue) -and -not (Test-OptionsField -Value $rawOptionsValue) -and $rawOptionsValue.StartsWith('[')) {
+                Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'Az options mező formátuma hibás. Elvárt alak például: [[word], [word, word], [word, word, word]].'
+            }
         }
 
         continue
     }
 
-    $seenRecord = $true
+    $linePayload = Get-LineTextAndOptions -Columns $columns
+    $rawOptionsValue = if ($columns.Count -gt 0) { $columns[$columns.Count - 1].Trim() } else { '' }
 
-    $chapterValue = $columns[0].Trim()
-    $indexValue = $columns[1].Trim()
-    $categoryValue = $columns[2].Trim()
-    $textValue = $columns[3].Trim()
+    if (-not $linePayload.Text -and -not $linePayload.Options) {
+        if (-not $seenRecord) {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A sor nem érvényes rekordkezdet.'
+            continue
+        }
 
-    if ($chapterValue -notmatch '^\d+$') {
-        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'Az első oszlopnak egyetlen számnak kell lennie.'
+        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A folytatássornak szanszkrit szöveget vagy opcionálisan egy érvényes options mezőt kell tartalmaznia.'
+
+        continue
     }
 
-    if ($indexValue -notmatch '^\d+$|^\d+-\d+$') {
-        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'A második oszlopnak egy számnak vagy X-Y formátumnak kell lennie.'
-    }
-
-    if (-not (Test-CategoryField -Value $categoryValue)) {
-        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message ("A harmadik oszlop csak a következő kategóriákat tartalmazhatja vesszővel elválasztva: {0}." -f ($AllowedCategories -join ', '))
-    }
-
-    foreach ($message in (Get-ContentFieldErrors -Value $textValue)) {
-        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message $message
+    if (-not [string]::IsNullOrWhiteSpace($rawOptionsValue) -and -not (Test-OptionsField -Value $rawOptionsValue) -and $rawOptionsValue.StartsWith('[')) {
+        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'Az options mező formátuma hibás. Elvárt alak például: [[word], [word, word], [word, word, word]].'
     }
 }
 

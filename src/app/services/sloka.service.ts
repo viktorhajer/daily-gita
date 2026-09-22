@@ -12,6 +12,12 @@ export class SlokaService {
   private loadPromise: Promise<void> | null = null;
   private storedCategories: string[] = [];
   private storedChapters: string[] = [];
+  private readonly optionWordPattern = String.raw`[\p{L}][\p{L}\p{M}'’-]*`;
+  private readonly optionsColumnPattern =
+    new RegExp(
+      String.raw`^\[(?:\s*\[\s*${this.optionWordPattern}(?:\s*,\s*${this.optionWordPattern})*\s*\]\s*(?:,\s*\[\s*${this.optionWordPattern}(?:\s*,\s*${this.optionWordPattern})*\s*\]\s*)*)\]$`,
+      'u'
+    );
 
   readonly texts: SlokaModel[] = [];
   lastViewedSloka: SlokaModel | null = null;
@@ -83,8 +89,7 @@ export class SlokaService {
         return;
       }
 
-      const sanskrit = sanskritLines.join('\n').trim();
-      currentRecord.sanskrit = sanskrit;
+      currentRecord.sanskrit = sanskritLines.join('\n').trim();
       records.push(currentRecord);
       currentRecord = null;
       sanskritLines = [];
@@ -113,15 +118,24 @@ export class SlokaService {
         currentRecord.categories = this.parseCategories(columns[2] ?? '');
         currentRecord.content = (columns[3] ?? '').trim();
 
-        const initialSanskrit = columns.slice(4).join('\t').trim();
+        const { text: initialSanskrit, options } = this.parseTextAndOptions(columns.slice(4));
         if (initialSanskrit) {
           sanskritLines.push(initialSanskrit);
+        }
+        if (options) {
+          currentRecord.options = options;
         }
         continue;
       }
 
       if (currentRecord) {
-        sanskritLines.push(line.trim());
+        const { text: sanskritLine, options } = this.parseTextAndOptions(columns);
+        if (sanskritLine) {
+          sanskritLines.push(sanskritLine);
+        }
+        if (options) {
+          currentRecord.options = options;
+        }
       }
     }
 
@@ -134,6 +148,33 @@ export class SlokaService {
       .split(',')
       .map((category) => this.toCapitalizedCategory(category.trim()))
       .filter((category) => !!category);
+  }
+
+  private parseTextAndOptions(columns: string[]): { text: string; options?: string[][] } {
+    if (columns.length === 0) {
+      return { text: '' };
+    }
+
+    const lastColumn = columns.at(-1)?.trim() ?? '';
+    if (!this.optionsColumnPattern.test(lastColumn)) {
+      return { text: columns.join('\t').trim() };
+    }
+
+    return {
+      text: columns.slice(0, -1).join('\t').trim(),
+      options: this.parseOptions(lastColumn),
+    };
+  }
+
+  private parseOptions(rawOptions: string): string[][] {
+    const optionGroupPattern = new RegExp(
+      String.raw`\[\s*((${this.optionWordPattern})(?:\s*,\s*${this.optionWordPattern})*)\s*\]`,
+      'gu'
+    );
+
+    return Array.from(rawOptions.matchAll(optionGroupPattern), ([, group]) =>
+      group.split(',').map((word) => word.trim())
+    );
   }
 
   private toCapitalizedCategory(category: string): string {
