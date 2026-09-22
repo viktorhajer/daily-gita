@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SlokaModel } from '../model/sloka.model';
 import { SlokaService } from '../services/sloka.service';
+import { getPracticeFeedbackMessage } from './practice-feedback.util';
 import { selectDifferentVerse } from './practice-round.util';
 import { normalizePracticeWord } from './practice-word.util';
 
@@ -90,6 +91,10 @@ export class PracticeComponent implements OnInit {
     return this.blanks.length;
   }
 
+  get completionFeedbackMessage(): string {
+    return getPracticeFeedbackMessage(this.correctAnswerCount, this.totalBlankCount);
+  }
+
   get infoModalTitle(): string {
     return 'Információ';
   }
@@ -131,9 +136,6 @@ export class PracticeComponent implements OnInit {
     activeBlank.userAnswer = this.currentAnswer.trim();
     this.currentAnswer = '';
     this.currentBlankIndex += 1;
-
-    console.log('submit');
-
     if (this.currentBlankIndex >= this.blanks.length) {
       this.isCompleted = true;
     }
@@ -243,8 +245,6 @@ export class PracticeComponent implements OnInit {
     if (!this.blanks.length) {
       this.isCompleted = true;
     }
-
-    console.log(this);
   }
 
   private tokenizeVerse(content: string): VerseToken[] {

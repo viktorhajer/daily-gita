@@ -63,7 +63,7 @@
 		  [disabled]="!hasActiveBlank"
 		/>
       <button class="answer-button icon-size" type="submit" [disabled]="!canSubmit()">
-		    <img src="assets/images/practice_next_icon.png"/>
+		    <img src="assets/images/practice_next_icon.png" alt="Következő"/>
       </button>
       <button
         class="reveal-button icon-size" type="button"
@@ -77,25 +77,25 @@
         (keyup.space)="stopRevealPendingBlanks()"
         (keydown.enter)="startRevealPendingBlanks()"
         (keyup.enter)="stopRevealPendingBlanks()">
-        <img src="assets/images/practice_show_icon.png"/>
+		<img src="assets/images/practice_show_icon.png" alt="Felfedés"/>
       </button>
       <button type="button" class="restart-button icon-size" (click)="restartPractice()">
-        <img src="assets/images/practice_restart_icon.png"/>
+		<img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
       </button>
       <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
-        <img src="assets/images/practice_cube_icon.png"/>
+		<img src="assets/images/practice_cube_icon.png" alt="Új kör"/>
       </button>
 	  </div>
 	</form>
 
 	<ng-template #completedState>
-    <p class="answer-summary">Eredmény: {{ correctAnswerCount }} / {{ totalBlankCount }}</p>
+			<p class="answer-summary">{{ completionFeedbackMessage }}</p>
 	  <div class="answer-panel answer-panel--completed">
       <button type="button" class="restart-button icon-size" (click)="restartPractice()">
-        <img src="assets/images/practice_restart_icon.png"/>
+				<img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
       </button>
       <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
-        <img src="assets/images/practice_cube_icon.png"/>
+				<img src="assets/images/practice_cube_icon.png" alt="Új kör"/>
       </button>
 	  </div>
 	</ng-template>
