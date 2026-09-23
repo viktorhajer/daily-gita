@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <title>Options Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f1e8;
+      --panel: #fffdf8;
+      --panel-border: #d7c7a8;
+      --text: #2f2418;
+      --muted: #6f604e;
+      --accent: #8f5f25;
+      --accent-hover: #754b1a;
+      --danger: #a12622;
+      --success: #17643a;
+      --shadow: 0 12px 32px rgba(78, 54, 24, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f8f4ec 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      border: 1px solid #cdbb98;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font: inherit;
+      color: inherit;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    button:focus {
+      outline: 3px solid rgba(143, 95, 37, 0.18);
+      outline-offset: 2px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    .secondary {
+      background: #6f604e;
+    }
+
+    .secondary:hover {
+      background: #594c3d;
+    }
+
+    .helper {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.success {
+      color: var(--success);
+    }
+
+    .status.info {
+      color: var(--muted);
+    }
+
+    .word-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .word-card {
+      border: 1px solid #e0d3ba;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fffdf9;
+    }
+
+    .word-card.invalid {
+      border-color: rgba(161, 38, 34, 0.45);
+      background: #fff7f6;
+    }
+
+    .word-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    .word-card p {
+      margin-bottom: 12px;
+    }
+
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .inline-note {
+      font-size: 0.9rem;
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .output-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .output-layout textarea {
+      min-height: 80px;
+      font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .copy-feedback {
+      min-height: 1.2em;
+      margin-top: 10px;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    code {
+      background: #f2ebdd;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 16px;
+      }
+
+      .output-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Options Generator</h1>
+    <p>
+      A program kikeresi a <code>*csillagok közötti*</code> szavakat, és mindegyikhez 2 opciós mezőt ad.
+    </p>
+
+    <section class="panel">
+      <label for="sourceText">Forrásszöveg</label>
+      <textarea id="sourceText" spellcheck="false">Most *zavarban* vagyok...</textarea>
+      <div class="actions">
+        <button id="generateButton" type="button">Input mezők létrehozása</button>
+      </div>
+      <p class="helper">A csillagozott részek száma fogja meghatározni az altömbök számát az outputban.</p>
+      <div id="sourceStatus" class="status info"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Kinyert csillagozott szavak</h2>
+      <p class="helper">Mindegyik szóhoz legfeljebb 2 opció adható meg, és legalább az egyik mezőt ki kell tölteni.</p>
+      <div id="wordList" class="word-list"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Generált options mező</h2>
+      <div class="output-layout">
+        <div>
+          <textarea id="resultText" readonly spellcheck="false"></textarea>
+          <div id="resultStatus" class="status info"></div>
+          <div id="copyFeedback" class="copy-feedback" aria-live="polite"></div>
+        </div>
+        <div>
+          <button id="copyButton" class="secondary" type="button" disabled>Másolás</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const highlightedWordPattern = /\*([^*]+)\*/gu;
+
+      const sourceTextElement = document.getElementById('sourceText');
+      const generateButtonElement = document.getElementById('generateButton');
+      const sourceStatusElement = document.getElementById('sourceStatus');
+      const wordListElement = document.getElementById('wordList');
+      const resultTextElement = document.getElementById('resultText');
+      const resultStatusElement = document.getElementById('resultStatus');
+      const copyButtonElement = document.getElementById('copyButton');
+      const copyFeedbackElement = document.getElementById('copyFeedback');
+
+      let currentGroups = [];
+
+      function escapeHtml(value) {
+        return value
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function extractHighlightedWords(text) {
+        const matches = Array.from(text.matchAll(highlightedWordPattern));
+        return matches
+          .map(function (match) {
+            return (match[1] || '').trim();
+          })
+          .filter(function (word) {
+            return word.length > 0;
+          });
+      }
+
+      function setStatus(element, message, type) {
+        element.textContent = message;
+        element.className = 'status ' + type;
+      }
+
+      function buildPreview(groups) {
+        return '[' + groups.map(function (group) {
+          return '[' + group.map(function (word) {
+            return word.trim();
+          }).filter(Boolean).join(', ') + ']';
+        }).join(', ') + ']';
+      }
+
+      function areAllGroupsValid(groups) {
+        return groups.length > 0 && groups.every(function (group) {
+          return group.some(function (value) {
+            return value.trim().length > 0;
+          });
+        });
+      }
+
+      function refreshOutput() {
+        const groups = currentGroups.map(function (_, groupIndex) {
+          const firstInput = document.getElementById('option-' + groupIndex + '-0');
+          const secondInput = document.getElementById('option-' + groupIndex + '-1');
+          return [
+            firstInput ? firstInput.value : '',
+            secondInput ? secondInput.value : ''
+          ];
+        });
+
+        const preview = buildPreview(groups);
+        const isValid = areAllGroupsValid(groups);
+
+        resultTextElement.value = preview;
+        copyButtonElement.disabled = !isValid;
+
+        groups.forEach(function (group, groupIndex) {
+          const cardElement = document.getElementById('word-card-' + groupIndex);
+          const noteElement = document.getElementById('note-' + groupIndex);
+          const hasAtLeastOneValue = group.some(function (value) {
+            return value.trim().length > 0;
+          });
+
+          if (!cardElement || !noteElement) {
+            return;
+          }
+
+          cardElement.classList.toggle('invalid', !hasAtLeastOneValue);
+          noteElement.hidden = hasAtLeastOneValue;
+        });
+
+        if (groups.length === 0) {
+          setStatus(resultStatusElement, 'Nincs még generált mező.', 'info');
+          return;
+        }
+
+        if (isValid) {
+          setStatus(resultStatusElement, 'Az output érvényes: minden csillagozott szóhoz tartozik legalább 1 megadott opció.', 'success');
+          return;
+        }
+
+        setStatus(resultStatusElement, 'Minden csillagozott szóhoz legalább az egyik input mezőt ki kell tölteni.', 'error');
+      }
+
+      function renderInputs(words) {
+        currentGroups = words.slice();
+        copyFeedbackElement.textContent = '';
+
+        if (words.length === 0) {
+          wordListElement.innerHTML = '';
+          resultTextElement.value = '[]';
+          copyButtonElement.disabled = true;
+          setStatus(sourceStatusElement, 'Nem találtam csillagozott szót a megadott szövegben.', 'error');
+          setStatus(resultStatusElement, 'Adj meg legalább egy *csillagozott* szót a forrásszövegben.', 'error');
+          return;
+        }
+
+        setStatus(sourceStatusElement, words.length + ' csillagozott szó található a szövegben.', 'success');
+
+        wordListElement.innerHTML = words.map(function (word, index) {
+          const escapedWord = escapeHtml(word);
+          return '' +
+            '<article class="word-card invalid" id="word-card-' + index + '">' +
+              '<h3>' + (index + 1) + '. szó: ' + escapedWord + '</h3>' +
+              '<div class="inputs-grid">' +
+                '<label>' +
+                  '<input id="option-' + index + '-0" type="text" autocomplete="off" spellcheck="false" placeholder="Első opció">' +
+                '</label>' +
+                '<label>' +
+                  '<input id="option-' + index + '-1" type="text" autocomplete="off" spellcheck="false" placeholder="Második opció">' +
+                '</label>' +
+              '</div>' +
+              '<div class="inline-note" id="note-' + index + '"></div>' +
+            '</article>';
+        }).join('');
+
+        const optionInputs = wordListElement.querySelectorAll('input');
+        optionInputs.forEach(function (input) {
+          input.addEventListener('input', function () {
+            copyFeedbackElement.textContent = '';
+            refreshOutput();
+          });
+        });
+
+        refreshOutput();
+      }
+
+      async function copyResult() {
+        if (copyButtonElement.disabled) {
+          return;
+        }
+
+        const value = resultTextElement.value;
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(value);
+          } else {
+            resultTextElement.focus();
+            resultTextElement.select();
+            document.execCommand('copy');
+          }
+
+          copyFeedbackElement.textContent = 'A generált szöveg a vágólapra került.';
+        } catch (error) {
+          copyFeedbackElement.textContent = 'A másolás nem sikerült. Jelöld ki kézzel a textarea tartalmát.';
+        }
+      }
+
+      function generate() {
+        const sourceText = sourceTextElement.value || '';
+        const words = extractHighlightedWords(sourceText);
+        renderInputs(words);
+      }
+
+      generateButtonElement.addEventListener('click', generate);
+      copyButtonElement.addEventListener('click', function () {
+        void copyResult();
+      });
+
+      generate();
+    })();
+  </script>
+</body>
+</html>
+
