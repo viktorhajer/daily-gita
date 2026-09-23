@@ -122,6 +122,26 @@ function Get-ContentFieldErrors {
     return $messages
 }
 
+function Get-HighlightedWordCount {
+    param(
+        [string]$Value
+    )
+
+    if ([string]::IsNullOrEmpty($Value)) {
+        return 0
+    }
+
+    $starCount = 0
+
+    for ($index = 0; $index -lt $Value.Length; $index++) {
+        if ($Value[$index] -eq '*') {
+            $starCount++
+        }
+    }
+
+    return [math]::Floor($starCount / 2)
+}
+
 function Test-OptionsField {
     param(
         [string]$Value
@@ -132,6 +152,31 @@ function Test-OptionsField {
     }
 
     return [System.Text.RegularExpressions.Regex]::IsMatch($Value.Trim(), $OptionsFieldPattern)
+}
+
+function Get-OptionsGroupCount {
+    param(
+        [string]$Value
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return 0
+    }
+
+    return [System.Text.RegularExpressions.Regex]::Matches($Value.Trim(), "\[\s*$OptionsWordPattern(?:\s*,\s*$OptionsWordPattern)*\s*\]").Count
+}
+
+function Test-HighlightedWordOptionsCount {
+    param(
+        [int]$ExpectedCount,
+        [string]$OptionsValue
+    )
+
+    if ([string]::IsNullOrWhiteSpace($OptionsValue) -or -not (Test-OptionsField -Value $OptionsValue)) {
+        return $true
+    }
+
+    return $ExpectedCount -eq (Get-OptionsGroupCount -Value $OptionsValue)
 }
 
 function Get-LineTextAndOptions {
@@ -167,6 +212,7 @@ $normalizedContent = ($fileContent -replace '^\uFEFF', '') -replace "`r`n?", "`n
 $lines = @([System.Text.RegularExpressions.Regex]::Split($normalizedContent, "`n"))
 $errors = New-Object System.Collections.Generic.List[object]
 $seenRecord = $false
+$currentHighlightedWordCount = 0
 
 for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
     $lineNumber = $lineIndex + 1
@@ -195,6 +241,7 @@ for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
         $indexValue = $columns[1].Trim()
         $categoryValue = $columns[2].Trim()
         $textValue = $columns[3].Trim()
+        $currentHighlightedWordCount = Get-HighlightedWordCount -Value $textValue
         $tailFields = if ($columns.Count -gt 4) { @($columns[4..($columns.Count - 1)]) } else { @() }
         $linePayload = Get-LineTextAndOptions -Columns $tailFields
 
@@ -212,6 +259,10 @@ for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
 
         foreach ($message in (Get-ContentFieldErrors -Value $textValue)) {
             Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message $message
+        }
+
+        if ($linePayload.Options -and -not (Test-HighlightedWordOptionsCount -ExpectedCount $currentHighlightedWordCount -OptionsValue $linePayload.Options)) {
+            Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message ("Az options mezőben {0} altömb van, de a 4. oszlopban {1} csillagozott szó szerepel." -f (Get-OptionsGroupCount -Value $linePayload.Options), $currentHighlightedWordCount)
         }
 
         if (@($tailFields).Length -gt 0) {
@@ -241,6 +292,10 @@ for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
 
     if (-not [string]::IsNullOrWhiteSpace($rawOptionsValue) -and -not (Test-OptionsField -Value $rawOptionsValue) -and $rawOptionsValue.StartsWith('[')) {
         Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message 'Az options mező formátuma hibás. Elvárt alak például: [[word], [word, word], [word, word, word]].'
+    }
+
+    if ($linePayload.Options -and -not (Test-HighlightedWordOptionsCount -ExpectedCount $currentHighlightedWordCount -OptionsValue $linePayload.Options)) {
+        Add-ValidationError -Collection $errors -LineNumber $lineNumber -Message ("Az options mezőben {0} altömb van, de a 4. oszlopban {1} csillagozott szó szerepel." -f (Get-OptionsGroupCount -Value $linePayload.Options), $currentHighlightedWordCount)
     }
 }
 

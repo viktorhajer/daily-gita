@@ -99,9 +99,6 @@ export function buildMultipleChoiceOptions(
 ): string[] {
   const normalizedCorrectWord = normalizeWordCompletionWord(correctWord);
   const candidateWords: string[] = [];
-
-  console.log('primaryOptions', primaryOptions);
-
   const addCandidateWords = (words: string[] | undefined): void => {
     words?.forEach((word) => {
       const trimmedWord = word.trim();
