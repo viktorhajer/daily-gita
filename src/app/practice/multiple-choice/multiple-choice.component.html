@@ -50,14 +50,15 @@
     </div>
 
     <div class="answer-options" *ngIf="activeBlank as blank">
-      <button
-        type="button"
-        class="choice-button"
-        *ngFor="let choice of blank.choices; trackBy: trackByIndex"
-        (click)="chooseAnswer(choice)"
-      >
-        {{ choice }}
-      </button>
+      @for (choice of blank.choices; track $index) {
+        <div class="answer-option" (click)="chooseAnswer(choice)">
+          <div class="answer-option-label-container">
+            <div class="button-icon-mind"></div>
+            <div class="answer-option-label">{{ choice }}</div>
+          </div>
+          <div class="answer-option-arrow"> > </div>
+        </div>
+      }
     </div>
   </form>
 

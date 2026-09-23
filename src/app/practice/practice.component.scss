@@ -8,26 +8,98 @@
 }
 
 .practice-landing-card {
-  margin: 0 auto;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #ffffff87;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  margin: 0 auto 20px auto;
+  padding: 1.2rem 1.5rem;
+  border-radius: 0.8rem;
+  background: rgb(255 255 255 / 30%);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
 }
 
 .practice-landing-title {
-  font-size: 20px;
+  font-size: 24px;
   margin: 0 0 0.5rem;
-  color: #6b91b4;
+  color: #155c9d;
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 0.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
 }
 
 .practice-landing-description {
-  margin: 0 0 1rem;
-  color: #1c255d;
+  margin: 1rem 0 0.5rem 0;
+  color: #1d5daf;
+  font-weight: bold;
 }
 
 .practice-landing-actions {
   display: flex;
   gap: 0.75rem;
+
+  .practice-section {
+    width: 50%;
+    padding: 10px;
+    border-radius: 0.8rem;
+    border: 1px solid #7eb0cea8;
+    box-shadow: 0 3px 10px #0000001c;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    color: #155c9d;
+    gap: 0.8rem;
+    background: url('../../assets/images/panel_blue.png') no-repeat bottom center #f9f8f5;
+
+    &.word-completion {
+      border-color: #f6e0ba;
+      background: url('../../assets/images/panel_yellow.png') no-repeat bottom center #f9f8f5;
+
+      .practice-action-icon-container, .practice-action-arrow-container {
+        background-color: #faecd8;
+      }
+    }
+
+    .practice-action-title {
+      font-weight: bold;
+    }
+
+    .practice-action-description {
+      font-size: 12px;
+      text-align: center;
+      height: 34px;
+    }
+
+    .practice-action-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: #e6edef;
+
+      .practice-action-icon {
+        width: 34px;
+      }
+    }
+
+    .practice-action-arrow-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #e6edef;
+
+      .practice-action-arrow {
+        width: 18px;
+      }
+    }
+
+  }
 }

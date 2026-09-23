@@ -13,7 +13,7 @@ export function getWordCompletionFeedbackMessage(
   }
 
   if (incorrectAnswerCount === 1 && totalBlankCount >= 3) {
-    return 'Nagyon ügyes vagy, csak egy apró hiba csúszott be!';
+    return 'Nagyon ügyes vagy, csak egy hiba csúszott be!';
   }
 
   if (correctAnswerCount <= 2) {

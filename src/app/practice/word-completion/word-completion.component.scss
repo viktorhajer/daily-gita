@@ -25,7 +25,7 @@
 .practice-title {
   margin: 0;
   font-size: 20px;
-  color: #6b91b4;
+  color: #155c9d;
 }
 
 .verse {
@@ -139,6 +139,7 @@
 .answer-label {
   font-weight: 600;
   font-size: 0.8rem;
+  color: #1d5daf;
 }
 
 .answer-label-row {
@@ -151,12 +152,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid #6b91b4;
+  border: 3px solid #3e7fbb;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   padding: 0;
-  background: #6b91b4;
+  background: #3e7fbb;
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -197,7 +198,7 @@
   width: 50px;
   height: 38px;
   min-height: auto;
-  background: #6b91b4;
+  background: #3e7fbb;
   border: none;
   transition:
 	transform 180ms ease,

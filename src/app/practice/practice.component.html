@@ -1,15 +1,34 @@
 <div class="practice-landing">
   <section class="practice-landing-card">
-    <h1 class="practice-landing-title">Gyakorlás</h1>
+    <h1 class="practice-landing-title">
+      <img src="assets/images/flower_small.png" alt="Gyakorlás"/>
+      Gyakorlás
+    </h1>
     <p class="practice-landing-description">Válassz egy gyakorlási módot.</p>
-
-    <div class="practice-landing-actions">
-      <button class="practice-landing-button" routerLink="/practice/multiple-choice" type="button">
-        Szóválasztó
-      </button>
-      <button class="practice-landing-button" routerLink="/practice/word-completion" type="button">
-        Szókiegészítés
-      </button>
-    </div>
   </section>
+
+  <div class="practice-landing-actions">
+
+    <section class="practice-section multiple-choice" routerLink="/practice/multiple-choice">
+      <div class="practice-action-icon-container">
+        <img src="assets/images/practice_icon_multi.png" alt="Szóválasztó" class="practice-action-icon"/>
+      </div>
+      <div class="practice-action-title">Szóválasztó</div>
+      <div class="practice-action-description">Válaszd ki a megfelelő szót.</div>
+      <div class="practice-action-arrow-container">
+        <img src="assets/images/arrow_medium_blue.png" alt="Tovább" class="practice-action-arrow"/>
+      </div>
+    </section>
+
+    <section class="practice-section word-completion" routerLink="/practice/word-completion">
+      <div class="practice-action-icon-container">
+        <img src="assets/images/practice_icon_write.png" alt="Szókiegészítés" class="practice-action-icon"/>
+      </div>
+      <div class="practice-action-title">Szókiegészítés</div>
+      <div class="practice-action-description">Írd be a hiányzó szavakat.</div>
+      <div class="practice-action-arrow-container">
+        <img src="assets/images/arrow_medium_yellow.png" alt="Tovább" class="practice-action-arrow"/>
+      </div>
+    </section>
+  </div>
 </div>

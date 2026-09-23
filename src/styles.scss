@@ -44,19 +44,6 @@ button {
     height: 36px;
   }
 
-  .button-icon-guidance {
-    background: url('assets/images/icon_sprites.png') -66px -122px no-repeat transparent;
-  }
-  .button-icon-mind {
-    background: url('assets/images/icon_sprites.png') -66px -66px no-repeat transparent;
-  }
-  .button-icon-library {
-    background: url('assets/images/icon_sprites.png') -122px -66px no-repeat transparent;
-  }
-  .button-icon-practice {
-    background: url('assets/images/icon_sprites.png') -66px -10px no-repeat transparent;
-  }
-
   &.is-selected {
     color: #9b5e05;
     background: #f6e0ba;
@@ -75,6 +62,19 @@ button {
       background: url('assets/images/icon_sprites.png') -10px -10px no-repeat transparent;
     }
   }
+}
+
+.button-icon-guidance {
+  background: url('assets/images/icon_sprites.png') -66px -122px no-repeat transparent;
+}
+.button-icon-mind {
+  background: url('assets/images/icon_sprites.png') -66px -66px no-repeat transparent;
+}
+.button-icon-library {
+  background: url('assets/images/icon_sprites.png') -122px -66px no-repeat transparent;
+}
+.button-icon-practice {
+  background: url('assets/images/icon_sprites.png') -66px -10px no-repeat transparent;
 }
 
 button:disabled {
