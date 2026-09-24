@@ -38,10 +38,12 @@
 
 .practice-landing-actions {
   display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
   gap: 0.75rem;
 
   .practice-section {
-    width: 50%;
+    flex: 1;
     padding: 10px;
     border-radius: 0.8rem;
     border: 1px solid #7eb0cea8;

@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
 import { PracticeComponent } from './practice.component';
+import { TroubleshooterComponent } from './troubleshooter/troubleshooter.component';
 import { WordCompletionComponent } from './word-completion/word-completion.component';
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'multiple-choice/:chapter/:index',
     component: MultipleChoiceComponent,
+  },
+  {
+    path: 'troubleshooter',
+    component: TroubleshooterComponent,
   },
   {
     path: ':chapter/:index',

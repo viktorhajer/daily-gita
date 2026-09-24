@@ -1,0 +1,74 @@
+<div class="practice-page">
+  <section class="practice-card" *ngIf="verse">
+	<header class="practice-header">
+	  <h1 class="practice-title">Bhagavad-gítá {{ verse.chapter }}.{{ verse.index }}</h1>
+	  <p class="practice-subtitle">Kattints azokra a szavakra, amelyeket hibásnak gondolsz.</p>
+	</header>
+
+	<div class="verse" aria-live="polite">
+	  “<ng-container *ngFor="let token of verseTokens; trackBy: trackByIndex">
+		<span *ngIf="token.kind === 'space'" class="verse-space">{{ token.text }}</span>
+
+		<span *ngIf="token.kind === 'text'" class="verse-word">{{ token.text }}</span>
+
+		<ng-container *ngIf="token.kind === 'blank' && blankState(token.blankIndex) as blank">
+		  <button
+			type="button"
+			class="verse-blank"
+			[class.verse-blank--selected]="blank.isSelected && !isCompleted"
+			[class.verse-blank--correct]="isCompleted && isBlankActionCorrect(blank)"
+			[class.verse-blank--incorrect]="isCompleted && !isBlankActionCorrect(blank)"
+			[disabled]="isCompleted"
+			[style.min-width.ch]="getBlankWidth(blank.displayText)"
+			(click)="toggleBlankSelection(token.blankIndex)"
+		  >
+			<ng-container *ngIf="!isCompleted; else evaluatedBlank">
+			  <span class="blank-text">{{ blank.displayText }}</span>
+			</ng-container>
+
+			<ng-template #evaluatedBlank>
+			  <span class="blank-result" [ngSwitch]="shouldShowCorrection(blank)">
+				<span *ngSwitchCase="true" class="blank-result--incorrect">
+				  <span class="blank-user">{{ blank.displayText }}</span>
+				  <span class="blank-correction">{{ blank.word }}</span>
+				</span>
+
+				<span *ngSwitchDefault class="blank-result--correct">{{ blank.displayText }}</span>
+			  </span>
+			</ng-template>
+		  </button>
+		</ng-container>
+	  </ng-container>”
+	</div>
+
+	<div class="answer-panel" *ngIf="!isCompleted; else completedState">
+	  <button type="button" class="ready-button" (click)="finishTroubleshooter()">
+      <img src="assets/images/practice_next_icon.png" alt="Kész"/>
+    </button>
+    <button type="button" class="restart-button icon-size" (click)="restartTroubleshooter()">
+      <img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
+    </button>
+    <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+      <img src="assets/images/practice_cube_icon.png" alt="Új kör"/>
+    </button>
+	</div>
+
+	<ng-template #completedState>
+	  <p class="answer-summary">{{ completionFeedbackMessage }}</p>
+	  <p class="answer-summary answer-summary--secondary">
+		Helyes: {{ correctAnswerCount }} / {{ totalBlankCount }}
+	  </p>
+
+	  <div class="answer-panel answer-panel--completed">
+      <button type="button" class="restart-button icon-size" (click)="restartTroubleshooter()">
+        <img src="assets/images/practice_restart_icon.png" alt="Újrakezdés"/>
+      </button>
+      <button type="button" class="new-round-button icon-size" (click)="startNewRound()">
+        <img src="assets/images/practice_cube_icon.png" alt="Új kör"/>
+      </button>
+	  </div>
+	</ng-template>
+  </section>
+</div>
+
+

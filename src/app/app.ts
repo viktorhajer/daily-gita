@@ -18,6 +18,7 @@ const IMAGE_ASSETS = [
   'assets/images/panel_yellow.png',
   'assets/images/practice_cube_icon.png',
   'assets/images/practice_menu_icon.png',
+  'assets/images/practice_icon_error.png',
   'assets/images/practice_icon_multi.png',
   'assets/images/practice_icon_write.png',
   'assets/images/practice_new_icon.png',
