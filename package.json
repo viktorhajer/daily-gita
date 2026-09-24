@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && powershell .\\scripts\\build-deploy.ps1",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

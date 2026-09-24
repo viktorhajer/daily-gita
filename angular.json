@@ -18,9 +18,10 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "browser": "src/main.ts",
+           "builder": "@angular/build:application",
+           "options": {
+             "outputPath": "dist",
+             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -32,9 +33,9 @@
             ],
             "styles": ["src/styles.scss"]
           },
-          "configurations": {
-            "production": {
-              "baseHref": "/daily-gita/",
+           "configurations": {
+             "production": {
+               "baseHref": "https://viktorhajer.github.io/daily-gita/",
               "budgets": [
                 {
                   "type": "initial",
