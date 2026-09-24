@@ -23,6 +23,7 @@ const IMAGE_ASSETS = [
   'assets/images/practice_icon_write.png',
   'assets/images/practice_new_icon.png',
   'assets/images/practice_next_icon.png',
+  'assets/images/practice_ready_icon.png',
   'assets/images/practice_restart_icon.png',
   'assets/images/practice_show_icon.png',
   'assets/images/welcome_bottom.png',
